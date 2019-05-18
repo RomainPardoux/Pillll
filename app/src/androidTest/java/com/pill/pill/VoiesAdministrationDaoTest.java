@@ -5,12 +5,12 @@ import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.pill.pill.database.DateConverter;
+import com.pill.pill.database.converter.DateConverter;
 import com.pill.pill.database.PillllDatabase;
 import com.pill.pill.database.dao.VoiesAdministrationDao;
 import com.pill.pill.database.dao.SpecialiteDao;
-import com.pill.pill.models.VoiesAdministration;
-import com.pill.pill.models.Specialite;
+import com.pill.pill.database.entity.VoiesAdministration;
+import com.pill.pill.database.entity.Specialite;
 
 import org.junit.After;
 import org.junit.Assert;

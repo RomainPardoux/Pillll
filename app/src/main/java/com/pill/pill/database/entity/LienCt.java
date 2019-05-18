@@ -1,4 +1,4 @@
-package com.pill.pill.models;
+package com.pill.pill.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

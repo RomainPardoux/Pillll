@@ -3,9 +3,7 @@ package com.pill.pill.repositories;
 import android.arch.lifecycle.LiveData;
 
 import com.pill.pill.database.dao.LienCtDao;
-import com.pill.pill.models.LienCt;
-
-import java.util.List;
+import com.pill.pill.database.entity.LienCt;
 
 /**
  * Created by Pardoux Romain on 18/01/2019

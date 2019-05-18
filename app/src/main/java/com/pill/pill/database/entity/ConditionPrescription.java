@@ -1,4 +1,4 @@
-package com.pill.pill.models;
+package com.pill.pill.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -7,21 +7,22 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
- * Created by Pardoux Romain on 03/01/2019
+ * Created by Pardoux Romain on 02/01/2019
  */
 
 @Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis"),
         indices = {@Index(value = {"specialite_id_code_cis"})})
-public class TitulaireSpecialite {
+public class ConditionPrescription {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    private String titulaire;
+    @ColumnInfo(name = "condition_prescription")
+    private String conditionPrescription;
     @ColumnInfo(name = "specialite_id_code_cis")
     private long specialiteIdCodeCis;
 
-    public TitulaireSpecialite(String titulaire, long specialiteIdCodeCis) {
-        this.titulaire = titulaire;
+    public ConditionPrescription( String conditionPrescription, long specialiteIdCodeCis) {
+        this.conditionPrescription = conditionPrescription;
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
@@ -34,12 +35,12 @@ public class TitulaireSpecialite {
         this.id = id;
     }
 
-    public String getTitulaire() {
-        return titulaire;
+    public String getConditionPrescription() {
+        return conditionPrescription;
     }
 
-    public void setTitulaire(String titulaire) {
-        this.titulaire = titulaire;
+    public void setConditionPrescription(String conditionPrescription) {
+        this.conditionPrescription = conditionPrescription;
     }
 
     public long getSpecialiteIdCodeCis() {

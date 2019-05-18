@@ -1,10 +1,16 @@
 package com.pill.pill.database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.content.ContentValues;
 import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.pill.pill.database.converter.DateConverter;
 import com.pill.pill.database.dao.AsmrDao;
 import com.pill.pill.database.dao.CompositionDao;
 import com.pill.pill.database.dao.ConditionPrescriptionDao;
@@ -17,18 +23,18 @@ import com.pill.pill.database.dao.SmrDao;
 import com.pill.pill.database.dao.SpecialiteDao;
 import com.pill.pill.database.dao.TitulaireSpecialiteDao;
 import com.pill.pill.database.dao.VoiesAdministrationDao;
-import com.pill.pill.models.Asmr;
-import com.pill.pill.models.Composition;
-import com.pill.pill.models.ConditionPrescription;
-import com.pill.pill.models.Evaluation;
-import com.pill.pill.models.Generique;
-import com.pill.pill.models.InfoImportante;
-import com.pill.pill.models.LienCt;
-import com.pill.pill.models.Presentation;
-import com.pill.pill.models.Smr;
-import com.pill.pill.models.Specialite;
-import com.pill.pill.models.TitulaireSpecialite;
-import com.pill.pill.models.VoiesAdministration;
+import com.pill.pill.database.entity.Asmr;
+import com.pill.pill.database.entity.Composition;
+import com.pill.pill.database.entity.ConditionPrescription;
+import com.pill.pill.database.entity.Evaluation;
+import com.pill.pill.database.entity.Generique;
+import com.pill.pill.database.entity.InfoImportante;
+import com.pill.pill.database.entity.LienCt;
+import com.pill.pill.database.entity.Presentation;
+import com.pill.pill.database.entity.Smr;
+import com.pill.pill.database.entity.Specialite;
+import com.pill.pill.database.entity.TitulaireSpecialite;
+import com.pill.pill.database.entity.VoiesAdministration;
 
 /**
  * Created by Pardoux Romain on 09/01/2019
@@ -57,16 +63,34 @@ public abstract class PillllDatabase extends RoomDatabase {
     public abstract TitulaireSpecialiteDao titulaireSpecialiteDao();
     public abstract VoiesAdministrationDao voiesAdministrationDao();
 
-    // Instance
+    // INSTANCE
     public static PillllDatabase getInstance(Context context){
         if (INSTANCE == null){
             synchronized (PillllDatabase.class) {
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            PillllDatabase.class, "PillllDatabase").build();
+                            PillllDatabase.class, "PillllDatabase")
+                            .addCallback(prepopulatedDatabase())
+                            .build();
                 }
             }
         }
         return INSTANCE;
+    }
+
+    private static Callback prepopulatedDatabase() {
+        return new Callback() {
+            @Override
+            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                super.onCreate(db);
+
+                // Ajout du contenu ajouté à l'initialisation de la base de donnée
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("id_code_cis", 123456);
+                // A Enrichir ... /!\
+                db.insert("Specialite", OnConflictStrategy.IGNORE, contentValues);
+
+            }
+        };
     }
 }

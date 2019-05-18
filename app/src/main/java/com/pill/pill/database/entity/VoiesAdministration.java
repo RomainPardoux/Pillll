@@ -1,4 +1,4 @@
-package com.pill.pill.models;
+package com.pill.pill.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -7,22 +7,22 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
- * Created by Pardoux Romain on 02/01/2019
+ * Created by Pardoux Romain on 17/01/2019
  */
 
 @Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis"),
         indices = {@Index(value = {"specialite_id_code_cis"})})
-public class ConditionPrescription {
+public class VoiesAdministration {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @ColumnInfo(name = "condition_prescription")
-    private String conditionPrescription;
+    @ColumnInfo(name = "voies_administration")
+    private String voiesAdministration;
     @ColumnInfo(name = "specialite_id_code_cis")
     private long specialiteIdCodeCis;
 
-    public ConditionPrescription( String conditionPrescription, long specialiteIdCodeCis) {
-        this.conditionPrescription = conditionPrescription;
+    public VoiesAdministration(String voiesAdministration, long specialiteIdCodeCis) {
+        this.voiesAdministration = voiesAdministration;
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
@@ -35,12 +35,12 @@ public class ConditionPrescription {
         this.id = id;
     }
 
-    public String getConditionPrescription() {
-        return conditionPrescription;
+    public String getVoiesAdministration() {
+        return voiesAdministration;
     }
 
-    public void setConditionPrescription(String conditionPrescription) {
-        this.conditionPrescription = conditionPrescription;
+    public void setVoiesAdministration(String voiesAdministration) {
+        this.voiesAdministration = voiesAdministration;
     }
 
     public long getSpecialiteIdCodeCis() {

@@ -2,7 +2,7 @@ package com.pill.pill.repositories;
 
 import android.arch.lifecycle.LiveData;
 import com.pill.pill.database.dao.PresentationDao;
-import com.pill.pill.models.Presentation;
+import com.pill.pill.database.entity.Presentation;
 import java.util.List;
 
 /**

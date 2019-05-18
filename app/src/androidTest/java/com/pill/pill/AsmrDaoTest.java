@@ -9,9 +9,9 @@ import com.pill.pill.database.PillllDatabase;
 import com.pill.pill.database.dao.LienCtDao;
 import com.pill.pill.database.dao.AsmrDao;
 import com.pill.pill.database.dao.SpecialiteDao;
-import com.pill.pill.models.LienCt;
-import com.pill.pill.models.Asmr;
-import com.pill.pill.models.Specialite;
+import com.pill.pill.database.entity.LienCt;
+import com.pill.pill.database.entity.Asmr;
+import com.pill.pill.database.entity.Specialite;
 
 import org.junit.After;
 import org.junit.Assert;

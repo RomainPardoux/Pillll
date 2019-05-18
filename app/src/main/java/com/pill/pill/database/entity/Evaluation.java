@@ -1,4 +1,4 @@
-package com.pill.pill.models;
+package com.pill.pill.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import com.pill.pill.database.DateConverter;
+import com.pill.pill.database.converter.DateConverter;
 import java.util.Date;
 
 /**

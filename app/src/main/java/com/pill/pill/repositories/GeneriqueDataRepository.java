@@ -2,17 +2,17 @@ package com.pill.pill.repositories;
 
 import android.arch.lifecycle.LiveData;
 import com.pill.pill.database.dao.GeneriqueDao;
-import com.pill.pill.models.Generique;
+import com.pill.pill.database.entity.Generique;
 
 /**
  * Created by Pardoux Romain on 18/01/2019
  */
 
-public class GeneriqueRepository {
+public class GeneriqueDataRepository {
 
     private final GeneriqueDao generiqueDao;
 
-    public GeneriqueRepository(GeneriqueDao generiqueDao) {
+    public GeneriqueDataRepository(GeneriqueDao generiqueDao) {
         this.generiqueDao = generiqueDao;
     }
 

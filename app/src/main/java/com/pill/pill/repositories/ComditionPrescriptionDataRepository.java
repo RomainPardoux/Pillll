@@ -3,7 +3,7 @@ package com.pill.pill.repositories;
 import android.arch.lifecycle.LiveData;
 
 import com.pill.pill.database.dao.ConditionPrescriptionDao;
-import com.pill.pill.models.ConditionPrescription;
+import com.pill.pill.database.entity.ConditionPrescription;
 
 import java.util.List;
 

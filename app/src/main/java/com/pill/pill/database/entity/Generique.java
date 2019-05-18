@@ -1,12 +1,10 @@
-package com.pill.pill.models;
+package com.pill.pill.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-
-import java.util.Objects;
 
 /**
  * Created by Pardoux Romain on 03/01/2019

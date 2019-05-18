@@ -2,7 +2,7 @@ package com.pill.pill.repositories;
 
 import android.arch.lifecycle.LiveData;
 import com.pill.pill.database.dao.AsmrDao;
-import com.pill.pill.models.Asmr;
+import com.pill.pill.database.entity.Asmr;
 import java.util.List;
 
 /**

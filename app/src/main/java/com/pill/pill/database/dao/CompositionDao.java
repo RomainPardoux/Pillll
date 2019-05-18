@@ -6,7 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import com.pill.pill.models.Composition;
+import com.pill.pill.database.entity.Composition;
 import java.util.List;
 
 /**

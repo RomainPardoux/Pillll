@@ -2,7 +2,7 @@ package com.pill.pill.repositories;
 
 import android.arch.lifecycle.LiveData;
 import com.pill.pill.database.dao.SmrDao;
-import com.pill.pill.models.Smr;
+import com.pill.pill.database.entity.Smr;
 import java.util.List;
 
 /**

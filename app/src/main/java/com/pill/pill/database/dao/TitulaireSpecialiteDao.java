@@ -6,7 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import com.pill.pill.models.TitulaireSpecialite;
+import com.pill.pill.database.entity.TitulaireSpecialite;
 import java.util.List;
 
 /**
