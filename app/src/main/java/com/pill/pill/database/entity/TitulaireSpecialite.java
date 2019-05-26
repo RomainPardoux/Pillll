@@ -25,6 +25,9 @@ public class TitulaireSpecialite {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public TitulaireSpecialite() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

@@ -25,6 +25,9 @@ public interface EvaluationDao {
     @Insert
     long insertEvaluation(Evaluation evaluation);
 
+    @Insert
+    void insertAll(List<Evaluation> evaluations);
+
     @Update
     int updateEvaluation(Evaluation evaluation);
 

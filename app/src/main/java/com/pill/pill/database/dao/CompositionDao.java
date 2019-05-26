@@ -25,6 +25,9 @@ public interface CompositionDao {
     @Insert
     long insertComposition(Composition composition);
 
+    @Insert
+    void insertAll(List<Composition> compositions);
+
     @Update
     int updateComposition(Composition composition);
 

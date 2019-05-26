@@ -25,6 +25,9 @@ public interface AsmrDao {
     @Insert
     long insertAsmr(Asmr asmr);
 
+    @Insert
+    void insertAll(List<Asmr> asmrs);
+
     @Update
     int updateAsmr(Asmr asmr);
 

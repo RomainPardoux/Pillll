@@ -42,6 +42,9 @@ public class Smr {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public Smr() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

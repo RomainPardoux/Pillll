@@ -1,15 +1,10 @@
 package com.pill.pill.database;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
-import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
-import android.content.ContentValues;
 import android.content.Context;
-import android.support.annotation.NonNull;
-
 import com.pill.pill.database.converter.DateConverter;
 import com.pill.pill.database.dao.AsmrDao;
 import com.pill.pill.database.dao.CompositionDao;
@@ -70,27 +65,10 @@ public abstract class PillllDatabase extends RoomDatabase {
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PillllDatabase.class, "PillllDatabase")
-                            .addCallback(prepopulatedDatabase())
                             .build();
                 }
             }
         }
         return INSTANCE;
-    }
-
-    private static Callback prepopulatedDatabase() {
-        return new Callback() {
-            @Override
-            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                super.onCreate(db);
-
-                // Ajout du contenu ajouté à l'initialisation de la base de donnée
-                ContentValues contentValues = new ContentValues();
-                contentValues.put("id_code_cis", 123456);
-                // A Enrichir ... /!\
-                db.insert("Specialite", OnConflictStrategy.IGNORE, contentValues);
-
-            }
-        };
     }
 }

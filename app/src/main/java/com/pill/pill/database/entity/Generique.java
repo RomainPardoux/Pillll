@@ -33,6 +33,9 @@ public class Generique {
         this.numeroTri = numeroTri;
     }
 
+    public Generique() {
+    }
+
     // GETTER AND SETTER
     public long getSpecialiteIdCodeCis() {
         return specialiteIdCodeCis;

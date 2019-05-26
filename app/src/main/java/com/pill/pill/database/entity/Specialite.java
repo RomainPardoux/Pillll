@@ -48,6 +48,9 @@ public class Specialite {
         this.etatCommercialisation = etatCommercialisation;
     }
 
+    public Specialite() {
+    }
+
     // GETTER AND SETTER
     public long getIdCodeCis() {
         return idCodeCis;

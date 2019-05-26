@@ -44,6 +44,9 @@ public class Composition {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public Composition() {
+    }
+
     //   GETTER AND SETTER
     public long getId() {
         return id;

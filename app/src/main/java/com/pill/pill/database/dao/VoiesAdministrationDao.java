@@ -25,6 +25,9 @@ public interface VoiesAdministrationDao {
     @Insert
     long insertVoiesAdministration(VoiesAdministration VoiesAdministration);
 
+    @Insert
+    void insertAll(List<VoiesAdministration> voiesAdministrations);
+
     @Update
     int updateVoiesAdministration(VoiesAdministration VoiesAdministration);
 

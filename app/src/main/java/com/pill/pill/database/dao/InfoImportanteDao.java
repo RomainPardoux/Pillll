@@ -25,6 +25,9 @@ public interface InfoImportanteDao {
     @Insert
     long insertInfoImportante(InfoImportante infoImportante);
 
+    @Insert
+    void insertAll(List<InfoImportante> infoImportantes);
+
     @Update
     int updateInfoImportante(InfoImportante infoImportante);
 

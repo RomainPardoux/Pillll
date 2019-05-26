@@ -26,6 +26,9 @@ public class ConditionPrescription {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public ConditionPrescription() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

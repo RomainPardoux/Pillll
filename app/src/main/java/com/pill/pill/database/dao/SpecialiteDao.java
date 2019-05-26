@@ -8,6 +8,8 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 import com.pill.pill.database.entity.Specialite;
 
+import java.util.List;
+
 /**
  * Created by Pardoux Romain on 05/01/2019
  */
@@ -26,6 +28,9 @@ public interface SpecialiteDao {
 
     @Insert
     long insertSpecialite (Specialite specialite);
+
+    @Insert
+    void insertAll(List<Specialite> specialites);
 
     @Update
     int updateSpecialite (Specialite specialite);

@@ -42,6 +42,9 @@ public class Asmr {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public Asmr() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

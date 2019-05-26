@@ -26,6 +26,9 @@ public class VoiesAdministration {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public VoiesAdministration() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

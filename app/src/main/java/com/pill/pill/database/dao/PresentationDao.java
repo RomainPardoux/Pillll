@@ -25,6 +25,9 @@ public interface PresentationDao {
     @Insert
     long insertPresentation(Presentation presentation);
 
+    @Insert
+    void insertAll(List<Presentation> presentations);
+
     @Update
     int updatePresentation(Presentation presentation);
 

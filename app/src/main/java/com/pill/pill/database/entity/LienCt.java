@@ -24,6 +24,9 @@ public class LienCt {
         this.lienAvisCt = lienAvisCt;
     }
 
+    public LienCt() {
+    }
+
     // GETTER AND SETTER
     public String getCodeDossierHas() {
         return codeDossierHas;

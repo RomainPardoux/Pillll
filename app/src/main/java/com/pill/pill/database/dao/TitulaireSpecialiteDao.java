@@ -25,6 +25,9 @@ public interface TitulaireSpecialiteDao {
     @Insert
     long insertTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite);
 
+    @Insert
+    void insertAll(List<TitulaireSpecialite> titulaireSpecialites);
+
     @Update
     int updateTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite);
 

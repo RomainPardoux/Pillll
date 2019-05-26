@@ -25,6 +25,9 @@ public interface ConditionPrescriptionDao {
     @Insert
     long insertConditionPrescription(ConditionPrescription conditionPrescription);
 
+    @Insert
+    void insertAll(List<ConditionPrescription> conditionPrescriptions);
+
     @Update
     int updateConditionPrescription(ConditionPrescription conditionPrescription);
 

@@ -8,6 +8,8 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 import com.pill.pill.database.entity.LienCt;
 
+import java.util.List;
+
 /**
  * Created by Pardoux Romain on 08/01/2019
  */
@@ -20,6 +22,9 @@ public interface LienCtDao {
 
     @Insert
     long insertLienCt(LienCt lienCt);
+
+    @Insert
+    void insertAll(List<LienCt> lienCts);
 
     @Update
     int updateLienCt(LienCt lienCt);

@@ -25,6 +25,9 @@ public interface SmrDao {
     @Insert
     long insertSmr(Smr smr);
 
+    @Insert
+    void insertAll(List<Smr> smrs);
+
     @Update
     int updateSmr(Smr smr);
 

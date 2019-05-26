@@ -56,6 +56,9 @@ public class Presentation {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+    public Presentation() {
+    }
+
     //    GETTER AND SETTER
     public long getId() {
         return id;
