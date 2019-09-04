@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.pill.pill"
+        applicationId "com.pillll.pillll"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -31,11 +31,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    //ROOM
+    // ROOM
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     // TESTING
     androidTestCompile "android.arch.core:core-testing:1.1.0"
-    //VIEW MODEL & LIVE DATA
+    // VIEW MODEL & LIVE DATA
     implementation "android.arch.lifecycle:extensions:1.1.0"
+    // CARD VIEW
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    // RETROFIT
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
 }
