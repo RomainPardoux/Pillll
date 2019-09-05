@@ -1,10 +1,11 @@
-package com.pillll.pillll;
+package com.pillll.pillll.ui.activity;
 
 import android.app.Application;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.pillll.pillll.R;
 import com.pillll.pillll.database.entity.Specialite;
 import com.pillll.pillll.repositories.SpecialiteDataRepository;
 

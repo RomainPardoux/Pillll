@@ -15,6 +15,7 @@ import com.pillll.pillll.database.dao.LienCtDao;
 import com.pillll.pillll.database.dao.PresentationDao;
 import com.pillll.pillll.database.dao.SmrDao;
 import com.pillll.pillll.database.dao.SpecialiteDao;
+import com.pillll.pillll.database.dao.SpecialiteEtRelationsDao;
 import com.pillll.pillll.database.dao.TitulaireSpecialiteDao;
 import com.pillll.pillll.database.dao.VoiesAdministrationDao;
 import com.pillll.pillll.database.entity.Asmr;
@@ -27,6 +28,7 @@ import com.pillll.pillll.database.entity.LienCt;
 import com.pillll.pillll.database.entity.Presentation;
 import com.pillll.pillll.database.entity.Smr;
 import com.pillll.pillll.database.entity.Specialite;
+import com.pillll.pillll.database.entity.SpecialiteEtRelations;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
 import com.pillll.pillll.database.entity.VoiesAdministration;
 
@@ -55,6 +57,7 @@ public abstract class PillllDatabase extends RoomDatabase {
     public abstract SmrDao smrDao();
     public abstract TitulaireSpecialiteDao titulaireSpecialiteDao();
     public abstract VoiesAdministrationDao voiesAdministrationDao();
+    public abstract SpecialiteEtRelationsDao specialiteEtRelationsDao();
 
     // INSTANCE
     public static PillllDatabase getInstance(final Context context){
