@@ -18,43 +18,43 @@ import java.util.Date;
 public class Specialite {
     @PrimaryKey
     @ColumnInfo(name = "id_code_cis")
-    @SerializedName("idCodeCis")
+    @SerializedName("id_code_cis")
     @Expose
     private long idCodeCis;
     @SerializedName("denomination")
     @Expose
     private String denomination;
     @ColumnInfo(name = "forme_pharmaceutique")
-    @SerializedName("formePharmaceutique")
+    @SerializedName("forme_pharmaceutique")
     @Expose
     private String formePharmaceutique;
     @ColumnInfo(name = "statut_administratif_amm")
-    @SerializedName("statutAdministratifAmm")
+    @SerializedName("statut_administratif_amm")
     @Expose
     private String statutAdministratifAmm;
     @ColumnInfo(name = "type_procedure_amm")
-    @SerializedName("typeProcedureAmm")
+    @SerializedName("type_procedure_amm")
     @Expose
     private String typeProcedureAmm;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_amm")
-    @SerializedName("dateAmm")
+    @SerializedName("date_amm")
     @Expose
     private Date dateAmm;
     @ColumnInfo(name = "statut_bdm")
-    @SerializedName("statutBdm")
+    @SerializedName("statut_bdm")
     @Expose
     private String statutBdm;
     @ColumnInfo(name = "numero_autorisation_euro")
-    @SerializedName("numeroAutorisationEuro")
+    @SerializedName("numero_autorisation_euro")
     @Expose
     private String numeroAutorisationEuro;
     @ColumnInfo(name = "surveillance_renforcee")
-    @SerializedName("surveillanceRenforcee")
+    @SerializedName("surveillance_renforcee")
     @Expose
     private boolean surveillanceRenforcee;
     @ColumnInfo(name = "etat_commercialisation")
-    @SerializedName("etatCommercialisation")
+    @SerializedName("etat_commercialisation")
     @Expose
     private String etatCommercialisation;
 

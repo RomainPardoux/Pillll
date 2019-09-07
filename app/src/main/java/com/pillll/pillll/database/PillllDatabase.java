@@ -21,14 +21,12 @@ import com.pillll.pillll.database.dao.VoiesAdministrationDao;
 import com.pillll.pillll.database.entity.Asmr;
 import com.pillll.pillll.database.entity.Composition;
 import com.pillll.pillll.database.entity.ConditionPrescription;
-import com.pillll.pillll.database.entity.Evaluation;
 import com.pillll.pillll.database.entity.Generique;
 import com.pillll.pillll.database.entity.InfoImportante;
 import com.pillll.pillll.database.entity.LienCt;
 import com.pillll.pillll.database.entity.Presentation;
 import com.pillll.pillll.database.entity.Smr;
 import com.pillll.pillll.database.entity.Specialite;
-import com.pillll.pillll.database.entity.SpecialiteEtRelations;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
 import com.pillll.pillll.database.entity.VoiesAdministration;
 
@@ -37,7 +35,7 @@ import com.pillll.pillll.database.entity.VoiesAdministration;
  */
 
 @Database(entities = {Specialite.class, Composition.class, Presentation.class, Asmr.class, ConditionPrescription.class,
-        Evaluation.class, Generique.class, InfoImportante.class, LienCt.class, Smr.class, TitulaireSpecialite.class, VoiesAdministration.class},
+        Generique.class, InfoImportante.class, LienCt.class, Smr.class, TitulaireSpecialite.class, VoiesAdministration.class},
         version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class PillllDatabase extends RoomDatabase {

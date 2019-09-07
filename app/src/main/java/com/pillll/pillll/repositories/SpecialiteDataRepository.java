@@ -49,7 +49,7 @@ public class SpecialiteDataRepository {
 
             @Override
             public void failure(RetrofitError error) {
-                // action à effectuer en cas d'echec
+
             }
         });
     }

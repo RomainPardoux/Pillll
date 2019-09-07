@@ -138,7 +138,7 @@ public interface PillllWebService {
     @GET("/specialites")
     List<Specialite> listSpecialiteWithDenomination(@Query("denomination") String denomination);
 
-    @GET("/Specialites/{idCodeCis}")
+    @GET("/specialites/{idCodeCis}")
     Specialite getSpecialiteAsyncWithCodeCis(@Path("idCodeCis") Long idCodeCis, Callback<Specialite> callback);
 
     @GET("/specialites")

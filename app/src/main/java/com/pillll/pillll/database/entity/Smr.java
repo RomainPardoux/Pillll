@@ -12,12 +12,14 @@ import com.google.gson.annotations.SerializedName;
 import com.pillll.pillll.database.converter.DateConverter;
 import java.util.Date;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by Pardoux Romain on 03/01/2019
  */
 
-@Entity(foreignKeys = {@ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis"),
-        @ForeignKey(entity = LienCt.class, parentColumns = "code_dossier_has", childColumns = "lien_ct_code_dossier_has")},
+@Entity(foreignKeys = {@ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis", onDelete = CASCADE, onUpdate = CASCADE),
+        @ForeignKey(entity = LienCt.class, parentColumns = "code_dossier_has", childColumns = "lien_ct_code_dossier_has", onDelete = CASCADE, onUpdate = CASCADE)},
         indices = {@Index(value = {"lien_ct_code_dossier_has"}),
                 @Index(value = {"specialite_id_code_cis"})})
 public class Smr {

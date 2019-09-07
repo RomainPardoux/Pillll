@@ -13,11 +13,13 @@ import com.pillll.pillll.database.converter.DateConverter;
 
 import java.util.Date;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by Pardoux Romain on 02/01/2019
  */
 
-@Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis"),
+@Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis", onDelete = CASCADE, onUpdate = CASCADE),
         indices = {@Index(value = {"specialite_id_code_cis"})})
 public class Presentation {
 

@@ -9,11 +9,13 @@ import android.arch.persistence.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by Pardoux Romain on 02/01/2019
  */
 
-@Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis"),
+@Entity(foreignKeys = @ForeignKey(entity = Specialite.class, parentColumns = "id_code_cis", childColumns = "specialite_id_code_cis", onDelete = CASCADE, onUpdate = CASCADE),
         indices = {@Index(value = {"specialite_id_code_cis"})})
 public class Composition {
 
@@ -54,7 +56,7 @@ public class Composition {
     @Expose
     private long specialiteIdCodeCis;
 
-    public Composition( String elementPharmaceutique, String codeSubstance, String denominationSubstance, String dosageSubstance, String referenceDosage, String natureComposant, int numeroLiaison, long specialiteIdCodeCis) {
+    public Composition(String elementPharmaceutique, String codeSubstance, String denominationSubstance, String dosageSubstance, String referenceDosage, String natureComposant, int numeroLiaison, long specialiteIdCodeCis) {
         this.elementPharmaceutique = elementPharmaceutique;
         this.codeSubstance = codeSubstance;
         this.denominationSubstance = denominationSubstance;
