@@ -2,15 +2,15 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.GeneriqueDao;
 import com.pillll.pillll.database.entity.Generique;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Generique data sources.
@@ -37,19 +37,23 @@ public class GeneriqueDataRepository {
      * @param idCodeCis
      */
     private void fetchGeneriqueFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService generiqueWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        generiqueWebService.listGeneriqueAsync(idCodeCis, new Callback<Generique>() {
+
+        PillllWebService generiqueWebService = retrofit.create(PillllWebService.class);
+        Call<Generique> call = generiqueWebService.listGenerique(idCodeCis);
+        call.enqueue(new Callback<Generique>() {
             @Override
-            public void success(Generique generique, Response response) {
-                generiqueFromApi = generique;
+            public void onResponse(Call<Generique> call, Response<Generique> response) {
+                generiqueFromApi = response.body();
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<Generique> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

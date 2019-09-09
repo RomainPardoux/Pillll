@@ -7,10 +7,11 @@ import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.SmrDao;
 import com.pillll.pillll.database.entity.Smr;
 import java.util.List;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Smr data sources.
@@ -36,18 +37,22 @@ public class SmrDataRepository {
      * @param idCodeCis
      */
     private void fetchSmrsFromApiByCodeCis(Long idCodeCis){
-        PillllWebService smrWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        smrWebService.listSmrAsync(idCodeCis, new Callback<List<Smr>>() {
+        PillllWebService smrWebService = retrofit.create(PillllWebService.class);
+        Call<List<Smr>> call = smrWebService.listSmr(idCodeCis);
+        call.enqueue(new Callback<List<Smr>>() {
             @Override
-            public void success(List<Smr> smrs, Response response) {
-                if (!smrs.isEmpty()){ smrsFromApi = smrs; }
+            public void onResponse(Call<List<Smr>> call, Response<List<Smr>> response) {
+                if (!response.body().isEmpty()){ smrsFromApi = response.body(); }
             }
+
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<Smr>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

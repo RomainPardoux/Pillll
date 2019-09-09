@@ -2,14 +2,22 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.SpecialiteDao;
 import com.pillll.pillll.database.entity.Specialite;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import com.pillll.pillll.ui.activity.MainActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Specialite data sources.
@@ -36,20 +44,26 @@ public class SpecialiteDataRepository {
      * @param idCodeCis
      */
     private void fetchSpecialiteFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService specialiteWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
 
-        specialiteWebService.getSpecialiteAsyncWithCodeCis(idCodeCis, new Callback<Specialite>() {
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PillllWebService specialiteWebService = retrofit.create(PillllWebService.class);
+
+        Call<Specialite> call = specialiteWebService.getSpecialiteWithCodeCis(idCodeCis);
+        call.enqueue(new Callback<Specialite>() {
             @Override
-            public void success(Specialite specialite, Response response) {
-                specialiteFromApi = specialite;
+            public void onResponse(Call<Specialite> call, Response<Specialite> response) {
+                specialiteFromApi = response.body();
+                Log.d("msg", response.body().getDenomination());
             }
 
             @Override
-            public void failure(RetrofitError error) {
-
+            public void onFailure(Call<Specialite> call, Throwable t) {
+                Log.d("msg", "fail");
             }
         });
     }

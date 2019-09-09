@@ -24,11 +24,11 @@ public class VoiesAdministration {
     @Expose
     private long id;
     @ColumnInfo(name = "voies_administration")
-    @SerializedName("voiesAdministration")
+    @SerializedName("voies_administration")
     @Expose
     private String voiesAdministration;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

@@ -7,10 +7,11 @@ import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.PresentationDao;
 import com.pillll.pillll.database.entity.Presentation;
 import java.util.List;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Presentation data sources.
@@ -39,21 +40,24 @@ public class PresentationDataRepository {
      * @param idCodeCis
      */
     private void fetchPresentationsFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService presentationWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        presentationWebService.listPresentationAsync(idCodeCis, new Callback<List<Presentation>>() {
+        PillllWebService presentationWebService = retrofit.create(PillllWebService.class);
+        Call<List<Presentation>> call = presentationWebService.listPresentation(idCodeCis);
+        call.enqueue(new Callback<List<Presentation>>() {
             @Override
-            public void success(List<Presentation> presentations, Response response) {
-                if (!presentations.isEmpty()) {
-                    presentationsFromApi = presentations;
+            public void onResponse(Call<List<Presentation>> call, Response<List<Presentation>> response) {
+                if (!response.body().isEmpty()) {
+                    presentationsFromApi = response.body();
                 }
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<Presentation>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });
@@ -65,32 +69,37 @@ public class PresentationDataRepository {
      * @param codeCip
      */
     private void fetchPresentationFromApiByCodeCip(String codeCip) {
-        PillllWebService presentationWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PillllWebService presentationWebService = retrofit.create(PillllWebService.class);
 
         if (codeCip.length() == 7) {
-            presentationWebService.getPresentationWithCodeCip7Async(codeCip, new Callback<Presentation>() {
+            Call<Presentation> call = presentationWebService.getPresentationWithCodeCip7(codeCip);
+            call.enqueue(new Callback<Presentation>() {
                 @Override
-                public void success(Presentation presentation, Response response) {
-                    presentationFromApi = presentation;
+                public void onResponse(Call<Presentation> call, Response<Presentation> response) {
+                    presentationFromApi = response.body();
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Call<Presentation> call, Throwable t) {
                     // action à effectuer en cas d'echec
                 }
             });
         } else if (codeCip.length() == 13) {
-            presentationWebService.getPresentationWithCodeCip13Async(codeCip, new Callback<Presentation>() {
+            Call<Presentation> call = presentationWebService.getPresentationWithCodeCip13(codeCip);
+            call.enqueue(new Callback<Presentation>() {
                 @Override
-                public void success(Presentation presentation, Response response) {
-                    presentationFromApi = presentation;
+                public void onResponse(Call<Presentation> call, Response<Presentation> response) {
+                    presentationFromApi = response.body();
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Call<Presentation> call, Throwable t) {
                     // action à effectuer en cas d'echec
                 }
             });

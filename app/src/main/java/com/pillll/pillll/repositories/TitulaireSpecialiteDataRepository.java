@@ -7,10 +7,11 @@ import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.TitulaireSpecialiteDao;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
 import java.util.List;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to TitulaireSpecialite data sources.
@@ -38,21 +39,26 @@ public class TitulaireSpecialiteDataRepository {
      * @param idCodeCis
      */
     private void fetchTitulaireSpecialitesFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService titulaireSpecialiteWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        titulaireSpecialiteWebService.listTitulaireSpecialiteAsync(idCodeCis, new Callback<List<TitulaireSpecialite>>() {
+
+        PillllWebService titulaireSpecialiteWebService = retrofit.create(PillllWebService.class);
+        Call<List<TitulaireSpecialite>> call = titulaireSpecialiteWebService.listTitulaireSpecialite(idCodeCis);
+
+        call.enqueue(new Callback<List<TitulaireSpecialite>>() {
             @Override
-            public void success(List<TitulaireSpecialite> titulaireSpecialites, Response response) {
-                if (!titulaireSpecialites.isEmpty()) {
-                    titulaireSpecialitesFromApi = titulaireSpecialites;
+            public void onResponse(Call<List<TitulaireSpecialite>> call, Response<List<TitulaireSpecialite>> response) {
+                if (!response.body().isEmpty()) {
+                    titulaireSpecialitesFromApi = response.body();
                 }
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<TitulaireSpecialite>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

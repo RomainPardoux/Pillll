@@ -18,11 +18,11 @@ public class LienCt {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "code_dossier_has")
-    @SerializedName("codeDossierHas")
+    @SerializedName("code_dossier_has")
     @Expose
     private String codeDossierHas;
     @ColumnInfo(name = "lien_avis_ct")
-    @SerializedName("lienAvisCt")
+    @SerializedName("lien_avis_ct")
     @Expose
     private String lienAvisCt;
 

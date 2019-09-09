@@ -9,11 +9,11 @@ import com.pillll.pillll.database.dao.InfoImportanteDao;
 import com.pillll.pillll.database.entity.InfoImportante;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -42,21 +42,24 @@ public class InfoImportanteDataRepository {
      * @param idCodeCis
      */
     private void fetchInfoImportantesFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService infoImportanteWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        infoImportanteWebService.listInfoImportanteAsync(idCodeCis, new Callback<List<InfoImportante>>() {
+        PillllWebService infoImportantesWebService = retrofit.create(PillllWebService.class);
+        Call<List<InfoImportante>> call = infoImportantesWebService.listInfoImportante(idCodeCis);
+        call.enqueue(new Callback<List<InfoImportante>>() {
             @Override
-            public void success(List<InfoImportante> infoImportantes, Response response) {
-                if (!infoImportantes.isEmpty()) {
-                    infoImportantesFromApi = infoImportantes;
+            public void onResponse(Call<List<InfoImportante>> call, Response<List<InfoImportante>> response) {
+                if (!response.body().isEmpty()) {
+                    infoImportantesFromApi = response.body();
                 }
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<InfoImportante>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

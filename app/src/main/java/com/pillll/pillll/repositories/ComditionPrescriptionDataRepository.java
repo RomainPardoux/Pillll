@@ -7,10 +7,11 @@ import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.ConditionPrescriptionDao;
 import com.pillll.pillll.database.entity.ConditionPrescription;
 import java.util.List;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to ConditionPrescription data sources.
@@ -35,18 +36,22 @@ public class ComditionPrescriptionDataRepository {
      * @param idCodeCis
      */
     private void fetchConditionPrescriptionsFromApiByCodeCis(Long idCodeCis){
-        PillllWebService conditionPrescriptionWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        conditionPrescriptionWebService.listConditionPrescriptionAsync(idCodeCis, new Callback<List<ConditionPrescription>>() {
+        PillllWebService conditionPrescriptionWebService = retrofit.create(PillllWebService.class);
+        Call<List<ConditionPrescription>> call = conditionPrescriptionWebService.listConditionPrescription(idCodeCis);
+        call.enqueue(new Callback<List<ConditionPrescription>>() {
             @Override
-            public void success(List<ConditionPrescription> conditionPrescriptions, Response response) {
-                if (!conditionPrescriptions.isEmpty()){ conditionPrescriptionsFromApi = conditionPrescriptions; }
+            public void onResponse(Call<List<ConditionPrescription>> call, Response<List<ConditionPrescription>> response) {
+                if (!response.body().isEmpty()){ conditionPrescriptionsFromApi = response.body(); }
             }
+
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<ConditionPrescription>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

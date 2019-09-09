@@ -2,18 +2,16 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.CompositionDao;
 import com.pillll.pillll.database.entity.Composition;
-
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Composition data sources.
@@ -41,21 +39,24 @@ public class CompositionDataRepository {
      * @param idCodeCis
      */
     private void fetchCompositionsFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService compositionWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        compositionWebService.listCompositionAsync(idCodeCis, new Callback<List<Composition>>() {
+        PillllWebService compositionWebService = retrofit.create(PillllWebService.class);
+        Call<List<Composition>> call = compositionWebService.listComposition(idCodeCis);
+        call.enqueue(new Callback<List<Composition>>() {
             @Override
-            public void success(List<Composition> compositions, Response response) {
-                if (!compositions.isEmpty()) {
-                    compositionsFromApi = compositions;
+            public void onResponse(Call<List<Composition>> call, Response<List<Composition>> response) {
+                if (!response.body().isEmpty()) {
+                    compositionsFromApi = response.body();
                 }
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<Composition>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

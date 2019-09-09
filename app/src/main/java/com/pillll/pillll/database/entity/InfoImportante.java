@@ -28,19 +28,19 @@ public class InfoImportante {
     private long id;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_debut")
-    @SerializedName("dateDebut")
+    @SerializedName("date_debut")
     @Expose
     private Date dateDebut;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_fin")
-    @SerializedName("dateFin")
+    @SerializedName("date_fin")
     @Expose
     private Date dateFin;
     @SerializedName("description")
     @Expose
     private String description;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

@@ -24,11 +24,11 @@ public class ConditionPrescription {
     @Expose
     private long id;
     @ColumnInfo(name = "condition_prescription")
-    @SerializedName("conditionPrescription")
+    @SerializedName("condition_prescription")
     @Expose
     private String conditionPrescription;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

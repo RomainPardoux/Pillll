@@ -7,10 +7,11 @@ import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.VoiesAdministrationDao;
 import com.pillll.pillll.database.entity.VoiesAdministration;
 import java.util.List;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to VoiesAdministration data sources.
@@ -38,21 +39,24 @@ public class VoiesAdministrationDataRepository {
      * @param idCodeCis
      */
     private void fetchVoiesAdministrationsFromApiByCodeCis(Long idCodeCis) {
-        PillllWebService voiesAdministrationWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        voiesAdministrationWebService.listVoiesAdministrationAsync(idCodeCis, new Callback<List<VoiesAdministration>>() {
+        PillllWebService voiesAdministrationWebService = retrofit.create(PillllWebService.class);
+        Call<List<VoiesAdministration>> call = voiesAdministrationWebService.listVoiesAdministration(idCodeCis);
+        call.enqueue(new Callback<List<VoiesAdministration>>() {
             @Override
-            public void success(List<VoiesAdministration> voiesAdministrations, Response response) {
-                if (!voiesAdministrations.isEmpty()) {
-                    voiesAdministrationsFromApi = voiesAdministrations;
+            public void onResponse(Call<List<VoiesAdministration>> call, Response<List<VoiesAdministration>> response) {
+                if (!response.body().isEmpty()) {
+                    voiesAdministrationsFromApi = response.body();
                 }
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<List<VoiesAdministration>> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

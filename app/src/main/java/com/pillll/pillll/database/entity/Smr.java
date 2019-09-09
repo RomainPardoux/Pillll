@@ -29,12 +29,12 @@ public class Smr {
     @Expose
     private long id;
     @ColumnInfo(name = "motif_evaluation")
-    @SerializedName("motifEvaluation")
+    @SerializedName("motif_evaluation")
     @Expose
     private String motifEvaluation;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_avis_ct")
-    @SerializedName("dateAvisCt")
+    @SerializedName("date_avis_ct")
     @Expose
     private Date dateAvisCt;
     @SerializedName("valeur")
@@ -44,11 +44,11 @@ public class Smr {
     @Expose
     private String libelle;
     @ColumnInfo(name = "lien_ct_code_dossier_has")
-    @SerializedName("lienCtCodeDossierHas")
+    @SerializedName("lien_ct_code_dossier_has")
     @Expose
     private String lienCtCodeDossierHas;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

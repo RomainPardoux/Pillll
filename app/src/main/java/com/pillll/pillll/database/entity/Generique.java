@@ -21,22 +21,22 @@ public class Generique {
 
     @PrimaryKey
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
     @ColumnInfo(name = "identifiant_groupe")
-    @SerializedName("identifiantGroupe")
+    @SerializedName("identifiant_groupe")
     @Expose
     private String identifiantGroupe;
     @ColumnInfo(name = "libelle_groupe")
-    @SerializedName("libelleGroupe")
+    @SerializedName("libelle_groupe")
     @Expose
     private String libelleGroupe;
     @SerializedName("type")
     @Expose
     private String type;
     @ColumnInfo(name = "numero_tri")
-    @SerializedName("numeroTri")
+    @SerializedName("numero_tri")
     @Expose
     private String numeroTri;
 

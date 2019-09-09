@@ -6,15 +6,12 @@ import android.arch.lifecycle.LiveData;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.LienCtDao;
-import com.pillll.pillll.database.entity.Asmr;
 import com.pillll.pillll.database.entity.LienCt;
-
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to LienCt data sources.
@@ -40,19 +37,22 @@ public class LienCtDataRepository {
      * @param codeDossierHas
      */
     private void fetchLienCtFromApiByCodeHas(String codeDossierHas) {
-        PillllWebService lienCtWebService = new RestAdapter.Builder()
-                .setEndpoint(PillllWebService.ENDPOINT)
-                .build()
-                .create(PillllWebService.class);
+        // Build Retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PillllWebService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        lienCtWebService.getLienCtAsync(codeDossierHas, new Callback<LienCt>() {
+        PillllWebService lienCtWebService = retrofit.create(PillllWebService.class);
+        Call<LienCt> call = lienCtWebService.getLienCt(codeDossierHas);
+        call.enqueue(new Callback<LienCt>() {
             @Override
-            public void success(LienCt lienCt, Response response) {
-                lienCtFromApi = lienCt;
+            public void onResponse(Call<LienCt> call, Response<LienCt> response) {
+                lienCtFromApi = response.body();
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<LienCt> call, Throwable t) {
                 // action à effectuer en cas d'echec
             }
         });

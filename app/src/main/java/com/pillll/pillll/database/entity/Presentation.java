@@ -28,54 +28,54 @@ public class Presentation {
     @Expose
     private long id;
     @ColumnInfo(name = "code_cip7")
-    @SerializedName("codeCip7")
+    @SerializedName("code_cip7")
     @Expose
     private String codeCip7;
     @ColumnInfo(name = "code_cip13")
-    @SerializedName("codeCip13")
+    @SerializedName("code_cip13")
     @Expose
     private String codeCip13;
     @SerializedName("libelle")
     @Expose
     private String libelle;
     @ColumnInfo(name = "statut_administratif")
-    @SerializedName("statutAdministratif")
+    @SerializedName("statut_administratif")
     @Expose
     private String statutAdministratif;
     @ColumnInfo(name = "etat_commercialisation")
-    @SerializedName("etatCommercialisation")
+    @SerializedName("etat_commercialisation")
     @Expose
     private String etatCommercialisation;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_commercialisation")
-    @SerializedName("dateCommercialisation")
+    @SerializedName("date_commercialisation")
     @Expose
     private Date dateCommercialisation;
     @ColumnInfo(name = "agrement_collectivites")
-    @SerializedName("agrementCollectivites")
+    @SerializedName("agrement_collectivites")
     @Expose
     private boolean agrementCollectivites;
     @ColumnInfo(name = "taux_remboursement")
-    @SerializedName("tauxRemboursement")
+    @SerializedName("taux_remboursement")
     @Expose
     private int tauxRemboursement;
     @ColumnInfo(name = "prix_euros")
-    @SerializedName("prixEuros")
+    @SerializedName("prix_euros")
     @Expose
     private double prixEuros;
     @ColumnInfo(name = "prix_euros_hors_honoraire")
-    @SerializedName("prixEurosHorsHonoraire")
+    @SerializedName("prix_euros_hors_honoraire")
     @Expose
     private double prixEurosHorsHonoraire;
     @SerializedName("honoraire")
     @Expose
     private double honoraire;
     @ColumnInfo(name = "precision_remboursement")
-    @SerializedName("precisionRemboursement")
+    @SerializedName("precision_remboursement")
     @Expose
     private String precisionRemboursement;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 
