@@ -2,6 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.util.Log;
+
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.PresentationDao;
@@ -22,10 +24,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PresentationDataRepository {
 
     private final PresentationDao presentationDao;
-    private Presentation presentationFromApi;
-    private List<Presentation> presentationsFromApi;
-    private LiveData<Presentation> presentationFromSqlite;
-    private LiveData<List<Presentation>> presentationsFromSqlite;
 
     public PresentationDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -35,40 +33,11 @@ public class PresentationDataRepository {
     // ACTION SUR WEB SERVICE
 
     /**
-     * Fetch Presentation list from pillll WebService by code cis
-     *
-     * @param idCodeCis
-     */
-    private void fetchPresentationsFromApiByCodeCis(Long idCodeCis) {
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PillllWebService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        PillllWebService presentationWebService = retrofit.create(PillllWebService.class);
-        Call<List<Presentation>> call = presentationWebService.listPresentation(idCodeCis);
-        call.enqueue(new Callback<List<Presentation>>() {
-            @Override
-            public void onResponse(Call<List<Presentation>> call, Response<List<Presentation>> response) {
-                if (!response.body().isEmpty()) {
-                    presentationsFromApi = response.body();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Presentation>> call, Throwable t) {
-                // action à effectuer en cas d'echec
-            }
-        });
-    }
-
-    /**
      * Fetch Presentation data from pillll WebService by code cip
      *
      * @param codeCip
      */
-    private void fetchPresentationFromApiByCodeCip(String codeCip) {
+    public void refreshPresentation(String codeCip) {
         // Build Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PillllWebService.ENDPOINT)
@@ -82,7 +51,18 @@ public class PresentationDataRepository {
             call.enqueue(new Callback<Presentation>() {
                 @Override
                 public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                    presentationFromApi = response.body();
+                    insertPresentation(response.body());
+/*
+                    if (response.isSuccessful()){
+                        presentationFromSqlite = getPresentationFromSqliteByCodeCip7(codeCip);
+                        if (presentationFromSqlite==null){
+                            insertPresentation(response.body());
+                        }else if (presentationFromSqlite.getValue().equals(response.body()))
+                            updatePresentation(response.body());
+                    }else {
+
+                    }
+*/
                 }
 
                 @Override
@@ -95,7 +75,16 @@ public class PresentationDataRepository {
             call.enqueue(new Callback<Presentation>() {
                 @Override
                 public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                    presentationFromApi = response.body();
+                    if (response.isSuccessful()){
+                        LiveData<Presentation> presentationFromSqlite = getPresentationByCodeCip13(codeCip);
+                        if (presentationFromSqlite==null){
+                            insertPresentation(response.body());
+                        }
+                        /*else if (presentationFromSqlite.getValue().equals(response.body()))
+                            updatePresentation(response.body());
+                    }else {
+*/
+                    }
                 }
 
                 @Override
@@ -108,76 +97,6 @@ public class PresentationDataRepository {
         }
     }
 
-    /**
-     * * Get a list of Presentation from pillll WebService by code cis
-     *
-     * @param idCodeCis
-     * @return List Presentation
-     */
-    public List<Presentation> getPresentationsFromApiByCodeCis(Long idCodeCis) {
-        if (presentationsFromApi.isEmpty()) {
-            fetchPresentationsFromApiByCodeCis(idCodeCis);
-        }
-        return presentationsFromApi;
-    }
-
-    /**
-     * * Get Presentation data from pillll WebService by code cip
-     *
-     * @param codeCip
-     * @return Presentation
-     */
-    public Presentation getPresentationFromApiByCodeCip(String codeCip) {
-        fetchPresentationFromApiByCodeCip(codeCip);
-        return presentationFromApi;
-    }
-
-    /**
-     * Get a list of Presentation from pillll WebService by code cis and persist it into Sqlite database
-     *
-     * @param specialiteIdCodeCis
-     * @return List Presentation
-     */
-    public LiveData<List<Presentation>> getPersistablePresentationsFromApiByCodeCis(Long specialiteIdCodeCis) {
-        if (presentationsFromApi.isEmpty()) {
-            fetchPresentationsFromApiByCodeCis(specialiteIdCodeCis);
-        }
-        if (!presentationsFromApi.isEmpty()) {
-            for (int i = 0; i < this.presentationsFromApi.size(); i++) {
-                getPresentationsFromSqliteById(presentationsFromApi.get(i).getId());
-                if (presentationFromSqlite.getValue().equals(null)) {
-                    insertPresentation(presentationsFromApi.get(i));
-                } else {
-                    updatePresentation(presentationsFromApi.get(i));
-                }
-            }
-        }
-        return getPresentationsFromSqliteByCodeCis(specialiteIdCodeCis);
-    }
-
-
-    /**
-     * Get Presentation data from pillll WebService by code cip and persist it into Sqlite database
-     *
-     * @param codeCip
-     * @return LiveData Presentation
-     */
-    public LiveData<Presentation> getPersistablePresentationsFromApiByCodeCip(String codeCip) {
-        fetchPresentationFromApiByCodeCip(codeCip);
-        getPresentationsFromSqliteById(presentationFromApi.getId());
-        if (presentationFromSqlite.getValue().equals(null)) {
-            insertPresentation(presentationFromApi);
-        } else {
-            updatePresentation(presentationFromApi);
-        }
-        if (codeCip.length() == 13) {
-            presentationFromSqlite = getPresentationFromSqliteByCodeCip13(codeCip);
-        } else {
-            presentationFromSqlite = getPresentationFromSqliteByCodeCip7(codeCip);
-        }
-        return presentationFromSqlite;
-    }
-
     // ACTION SUR SQLITE DB
 
     /**
@@ -186,9 +105,8 @@ public class PresentationDataRepository {
      * @param id
      * @return list of presentation
      */
-    public LiveData<Presentation> getPresentationsFromSqliteById(long id) {
-        this.presentationFromSqlite = this.presentationDao.selectPresentationById(id);
-        return this.presentationFromSqlite;
+    public LiveData<Presentation> getPresentationsById(long id) {
+        return this.presentationDao.selectPresentationById(id);
     }
 
     /**
@@ -197,9 +115,8 @@ public class PresentationDataRepository {
      * @param specialiteIdCodeCis
      * @return list of presentation
      */
-    public LiveData<List<Presentation>> getPresentationsFromSqliteByCodeCis(long specialiteIdCodeCis) {
-        this.presentationsFromSqlite = this.presentationDao.selectPresentationByCodeCis(specialiteIdCodeCis);
-        return this.presentationsFromSqlite;
+    public LiveData<List<Presentation>> getPresentationsByCodeCis(long specialiteIdCodeCis) {
+        return this.presentationDao.selectPresentationByCodeCis(specialiteIdCodeCis);
     }
 
     /**
@@ -208,9 +125,8 @@ public class PresentationDataRepository {
      * @param codeCip7
      * @return Presentation
      */
-    public LiveData<Presentation> getPresentationFromSqliteByCodeCip7(String codeCip7) {
-        this.presentationFromSqlite = this.presentationDao.selectPresentationByCodeCip7(codeCip7);
-        return this.presentationFromSqlite;
+    public LiveData<Presentation> getPresentationByCodeCip7(String codeCip7) {
+        return this.presentationDao.selectPresentationByCodeCip7(codeCip7);
     }
 
     /**
@@ -219,9 +135,8 @@ public class PresentationDataRepository {
      * @param codeCip13
      * @return Presentation
      */
-    public LiveData<Presentation> getPresentationFromSqliteByCodeCip13(String codeCip13) {
-        this.presentationFromSqlite = this.presentationDao.selectPresentationByCodeCip13(codeCip13);
-        return this.presentationFromSqlite;
+    public LiveData<Presentation> getPresentationByCodeCip13(String codeCip13) {
+        return this.presentationDao.selectPresentationByCodeCip13(codeCip13);
     }
 
     /**

@@ -3,16 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.SpecialiteDao;
 import com.pillll.pillll.database.entity.Specialite;
-import com.pillll.pillll.ui.activity.MainActivity;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

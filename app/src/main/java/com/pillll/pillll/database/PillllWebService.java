@@ -12,95 +12,93 @@ import com.pillll.pillll.database.entity.Specialite;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
 import com.pillll.pillll.database.entity.VoiesAdministration;
 import java.util.List;
-
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface PillllWebService {
 
-    public static final String ENDPOINT = "http://www.pillll.com/api/";
+    public static final String ENDPOINT = "https://www.pillll.com/api/";
 
     // ASMR
-    @GET("/asmrs/{id}")
+    @GET("asmrs/{id}")
     Call<Asmr> getAsmr(@Path("id") Integer id);
 
-    @GET("/asmrs")
+    @GET("asmrs")
     Call<List<Asmr>> listAsmr(@Query("idCodeCis") Long idCodeCis );
 
     // COMPOSITION
-    @GET("/compositions/{id}")
+    @GET("compositions/{id}")
     Call<Composition> getComposition(@Path("id") Integer id);
 
-    @GET("/compositions")
+    @GET("compositions")
     Call<List<Composition>> listComposition(@Query("idCodeCis") Long idCodeCis );
 
     // CONDITION PRESCRIPTION
-    @GET("/conditionsPrescriptions/{id}")
+    @GET("conditionsPrescriptions/{id}")
     Call<ConditionPrescription> getConditionPrescription(@Path("id") Integer id);
 
-    @GET("/conditionsPrescriptions")
+    @GET("conditionsPrescriptions")
     Call<List<ConditionPrescription>> listConditionPrescription(@Query("idCodeCis") Long idCodeCis );
 
     // GENERIQUE
-    @GET("/generiques/{id}")
+    @GET("generiques/{id}")
     Call<Generique> getGenerique(@Path("id") Integer id);
 
-    @GET("/generiques")
+    @GET("generiques")
     Call<Generique> listGenerique(@Query("idCodeCis") Long idCodeCis );
 
     // INFO IMPORTANTE
-    @GET("/infosImportantes/{id}")
+    @GET("infosImportantes/{id}")
     Call<InfoImportante> getInfoImportante(@Path("id") Integer id);
 
-    @GET("/infosImportantes")
+    @GET("infosImportantes")
     Call<List<InfoImportante>> listInfoImportante(@Query("idCodeCis") Long idCodeCis );
 
     // LIEN CT
-    @GET("/lientCts/{codeDossierHas}")
+    @GET("lientCts/{codeDossierHas}")
     Call<LienCt> getLienCt(@Path("codeDossierHas") String codeDossierHas);
 
     // PRESENTATION
-    @GET("/presentations/{id}")
+    @GET("presentations/{id}")
     Call<Presentation> getPresentation(@Path("id") Integer id);
 
-    @GET("/presentations/codeCip7/{codeCip7}")
+    @GET("presentations/codecip7/{codeCip7}")
     Call<Presentation> getPresentationWithCodeCip7(@Path("codeCip7") String codeCip7);
 
-    @GET("/presentations/codeCip13/{codeCip13}")
+    @GET("presentations/codecip13/{codeCip13}")
     Call<Presentation> getPresentationWithCodeCip13(@Path("codeCip13") String codeCip13);
 
-    @GET("/presentations")
+    @GET("presentations")
     Call<List<Presentation>> listPresentation(@Query("idCodeCis") Long idCodeCis );
 
     // SMR
-    @GET("/smrs/{id}")
+    @GET("smrs/{id}")
     Call<Smr> getSmr(@Path("id") Integer id);
 
-    @GET("/smrs")
+    @GET("smrs")
     Call<List<Smr>> listSmr(@Query("idCodeCis") Long idCodeCis );
 
     // SPECIALITE
-    @GET("Specialites/{idCodeCis}")
+    @GET("specialites/{idCodeCis}")
     Call<Specialite> getSpecialiteWithCodeCis(@Path("idCodeCis") Long idCodeCis);
 
     @GET("specialites")
     Call<List<Specialite>> listSpecialiteWithDenomination(@Query("denomination") String denomination);
 
     // TITULAIRE SPECIALITE
-    @GET("/titulairesSpecialites/{id}")
+    @GET("titulairesSpecialites/{id}")
     Call<TitulaireSpecialite> getTitulaireSpecialite(@Path("id") Integer id);
 
-    @GET("/titulairesSpecialites")
+    @GET("titulairesSpecialites")
     Call<List<TitulaireSpecialite>> listTitulaireSpecialite(@Query("idCodeCis") Long idCodeCis );
 
     // VOIES ADMINISTRATION
-    @GET("/voiesAdministrations/{id}")
+    @GET("voiesAdministrations/{id}")
     Call<VoiesAdministration> getVoiesAdministration(@Path("id") Integer id);
 
-    @GET("/voiesAdministrations")
+    @GET("voiesAdministrations")
     Call<List<VoiesAdministration>> listVoiesAdministration(@Query("idCodeCis") Long idCodeCis );
 
 }

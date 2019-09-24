@@ -14,22 +14,6 @@
         android:paddingBottom="20dp" />
 
     <Button
-        android:id="@+id/searchFromSqlite_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="getDataFromSqlite"
-        android:paddingBottom="20dp"
-        android:text="Get Data From Sqlite" />
-
-    <Button
-        android:id="@+id/searchPersistableDataFromApi_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="getPersistableDataFromApi"
-        android:paddingBottom="20dp"
-        android:text="Get Persistable Data From Api" />
-
-    <Button
         android:id="@+id/searchFromApi_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,17 +21,24 @@
         android:paddingBottom="20dp"
         android:text="Get Data From Api" />
 
-    <TextView
-        android:id="@+id/denomination_textView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/formePharmaceutique_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/denomination_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </LinearLayout>
