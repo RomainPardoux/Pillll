@@ -32,30 +32,57 @@ public class MainActivity extends AppCompatActivity {
     private EditText editText;
     private TextView textView;
 
+    //TEST
+    private LiveData<String> text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText = findViewById(R.id.idCodeCisArea);
         textView = findViewById(R.id.denomination_textView);
-/*
         specialiteDetailViewModel = ViewModelProviders.of(this).get(SpecialiteDetailViewModel.class);
-        specialiteDetailViewModel.initViewModel("2756239");
+        /*textView.setText(specialiteDetailViewModel.getText().getValue());*/
+        specialiteDetailViewModel.refreshPresentation("2756239");
+        specialiteDetailViewModel.getCurrentPresentations("2756239").observeForever(new Observer<Presentation>() {
+            @Override
+            public void onChanged(@Nullable Presentation presentation) {
+                Log.d(this.getClass().getCanonicalName(), "onChanged");
+                if (presentation != null){
+                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
+                    textView.setText(presentation.getLibelle());
+                }
+            }
+        });
+        /*specialiteDetailViewModel.getCurrentPresentations("2756239").observeForever(this, new Observer<Presentation>() {
+            @Override
+            public void onChanged(@Nullable Presentation presentation) {
+                Log.d(this.getClass().getCanonicalName(), "onChanged");
+                if (presentation != null){
+                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
+                    textView.setText(presentation.getLibelle());
+                }
+            }
+        });
+        *//*specialiteDetailViewModel.initViewModel("2756239");
         currentPresentation = specialiteDetailViewModel.getCurrentPresentations();
-        textView.setText(currentPresentation.getValue().getLibelle());
-
+        currentPresentation.observe(this, new Observer<Presentation>() {
+            @Override
+            public void onChanged(@Nullable Presentation presentation) {
+                Log.d(this.getClass().getCanonicalName(), "onChanged");
+                if (presentation != null){
+                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
+                    textView.setText(presentation.getLibelle());
+                }
+            }
+        });
 */
-
     }
 
-
-
-
-    public void getDataFromApi(View view) {
-
+/*    public void getDataFromApi(View view) {
 
         //IdCodeCis input
-        String idCodeCip = editText.getText().toString();
+        *//*String idCodeCip = editText.getText().toString();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(PillllWebService.ENDPOINT)
@@ -76,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
                 // action à effectuer en cas d'echec
             }
         });
+*//*
 
-
-        /*specialiteDetailViewModel.initViewModel(idCodeCip);
+        *//*specialiteDetailViewModel.initViewModel(idCodeCip);
         currentPresentation = specialiteDetailViewModel.getCurrentPresentations();
         textView.setText(currentPresentation.getValue().getLibelle());
-    */}
+    *//*}*/
 }

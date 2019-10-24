@@ -19,8 +19,6 @@ import retrofit2.http.Query;
 
 public interface PillllWebService {
 
-    public static final String ENDPOINT = "https://www.pillll.com/api/";
-
     // ASMR
     @GET("asmrs/{id}")
     Call<Asmr> getAsmr(@Path("id") Integer id);

@@ -37,7 +37,10 @@ public class SpecialiteDetailViewModelCopy extends AndroidViewModel {
 */
     @Nullable
     private LiveData<Presentation> currentPresentation;
-/*
+
+
+
+    /*
     @Nullable
     private LiveData<Generique> generique;
     @Nullable

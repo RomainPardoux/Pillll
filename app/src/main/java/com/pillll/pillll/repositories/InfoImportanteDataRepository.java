@@ -3,6 +3,7 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
+import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.InfoImportanteDao;
@@ -44,7 +45,7 @@ public class InfoImportanteDataRepository {
     private void fetchInfoImportantesFromApiByCodeCis(Long idCodeCis) {
         // Build Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PillllWebService.ENDPOINT)
+                .baseUrl(NetworkService.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

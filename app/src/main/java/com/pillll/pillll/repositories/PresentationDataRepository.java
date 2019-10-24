@@ -2,8 +2,9 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 import android.util.Log;
-
+import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.PresentationDao;
@@ -12,8 +13,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Presentation data sources.
@@ -33,68 +32,98 @@ public class PresentationDataRepository {
     // ACTION SUR WEB SERVICE
 
     /**
-     * Fetch Presentation data from pillll WebService by code cip
+     * Refresh Presentation data from pillll WebService by code cip
      *
      * @param codeCip
      */
     public void refreshPresentation(String codeCip) {
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PillllWebService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        PillllWebService presentationWebService = retrofit.create(PillllWebService.class);
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<Presentation> call;
 
-        if (codeCip.length() == 7) {
-            Call<Presentation> call = presentationWebService.getPresentationWithCodeCip7(codeCip);
-            call.enqueue(new Callback<Presentation>() {
-                @Override
-                public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                    insertPresentation(response.body());
-/*
-                    if (response.isSuccessful()){
-                        presentationFromSqlite = getPresentationFromSqliteByCodeCip7(codeCip);
-                        if (presentationFromSqlite==null){
-                            insertPresentation(response.body());
-                        }else if (presentationFromSqlite.getValue().equals(response.body()))
-                            updatePresentation(response.body());
-                    }else {
-
-                    }
-*/
-                }
-
-                @Override
-                public void onFailure(Call<Presentation> call, Throwable t) {
-                    // action à effectuer en cas d'echec
-                }
-            });
-        } else if (codeCip.length() == 13) {
-            Call<Presentation> call = presentationWebService.getPresentationWithCodeCip13(codeCip);
-            call.enqueue(new Callback<Presentation>() {
-                @Override
-                public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                    if (response.isSuccessful()){
-                        LiveData<Presentation> presentationFromSqlite = getPresentationByCodeCip13(codeCip);
-                        if (presentationFromSqlite==null){
-                            insertPresentation(response.body());
-                        }
-                        /*else if (presentationFromSqlite.getValue().equals(response.body()))
-                            updatePresentation(response.body());
-                    }else {
-*/
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Presentation> call, Throwable t) {
-                    // action à effectuer en cas d'echec
-                }
-            });
-        } else {
-            // action à effectuer si code cip <> de 7 ou 13
+        switch (codeCip.length()){
+            case 7:
+                call = pillllApi.getPresentationWithCodeCip7(codeCip);
+                break;
+            case 13:
+                call = pillllApi.getPresentationWithCodeCip13(codeCip);
+                break;
+            default:
+                call = null;
         }
+
+        call.enqueue(new Callback<Presentation>() {
+            @Override
+            public void onResponse(Call<Presentation> call, Response<Presentation> response) {
+                if (response.isSuccessful()){
+                    persistPresentation(response.body());
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Presentation> call, Throwable t) {
+                // action à effectuer en cas d'echec
+                Log.d("error","failure");
+            }
+        });
+
+    }
+
+    /**
+     * Persist Presentation data from Sqlite database in AsyncTask.
+     *
+     * @param presentation
+     */
+    private void persistPresentation(Presentation presentation){
+
+        new AsyncTask<Presentation, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Presentation... presentations) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertPresentation(presentations[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updatePresentation(presentations[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
+                }
+                return true;
+            }
+
+        }.execute(presentation);
     }
 
     // ACTION SUR SQLITE DB
@@ -168,4 +197,5 @@ public class PresentationDataRepository {
     public int deletePresentation(Presentation presentation) {
         return this.presentationDao.deletePresentation(presentation);
     }
+
 }
