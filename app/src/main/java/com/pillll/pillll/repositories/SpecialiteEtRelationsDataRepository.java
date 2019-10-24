@@ -16,8 +16,6 @@ import java.util.List;
 public class SpecialiteEtRelationsDataRepository {
 
     private final SpecialiteEtRelationsDao specialiteEtRelationsDao;
-    private LiveData<SpecialiteEtRelations> specialiteEtRelationsFromSqlite;
-    private LiveData<List<SpecialiteEtRelations>> specialitesEtRelationsFromSqlite;
 
     public SpecialiteEtRelationsDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -33,8 +31,7 @@ public class SpecialiteEtRelationsDataRepository {
      * @return liveData specialiteEtRelations
      */
     public LiveData<SpecialiteEtRelations> getSpecialiteEtRelationsFromSqliteByCodeCis(long specialiteIdCodeCis) {
-        this.specialiteEtRelationsFromSqlite = this.specialiteEtRelationsDao.selectSpecialiteEtRelationsByCodeCis(specialiteIdCodeCis);
-        return this.specialiteEtRelationsFromSqlite;
+        return this.specialiteEtRelationsDao.selectSpecialiteEtRelationsByCodeCis(specialiteIdCodeCis);
     }
 
     /**
@@ -43,7 +40,6 @@ public class SpecialiteEtRelationsDataRepository {
      * @return liveData List specialiteEtRelations
      */
     public LiveData<List<SpecialiteEtRelations>> getAllSpecialiteEtRelationsFromSqlite() {
-        this.specialitesEtRelationsFromSqlite = this.specialiteEtRelationsDao.selectAllSpecialitesEtRelations();
-        return this.specialitesEtRelationsFromSqlite;
+        return this.specialiteEtRelationsDao.selectAllSpecialitesEtRelations();
     }
 }

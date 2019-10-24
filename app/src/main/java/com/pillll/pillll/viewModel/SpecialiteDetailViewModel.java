@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.pillll.pillll.database.entity.Presentation;
+import com.pillll.pillll.database.entity.Specialite;
 import com.pillll.pillll.repositories.PresentationDataRepository;
+import com.pillll.pillll.repositories.SpecialiteDataRepository;
 
 /**
  * Created by Pardoux Romain on 26/02/2019
@@ -18,15 +20,18 @@ import com.pillll.pillll.repositories.PresentationDataRepository;
 public class SpecialiteDetailViewModel extends AndroidViewModel {
 
     private PresentationDataRepository presentationDataSource;
+    private SpecialiteDataRepository specialiteDataSource;
+
     @Nullable
     private LiveData<Presentation> currentPresentation;
-
+    @Nullable
+    private LiveData<Specialite> currentSpecialite;
 
     // CONSTRUCTEURS
     public SpecialiteDetailViewModel(Application application) {
         super(application);
         this.presentationDataSource = new PresentationDataRepository(application);
-
+        this.specialiteDataSource = new SpecialiteDataRepository(application);
     }
 
     public void refreshPresentation(String codeCip){

@@ -2,6 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
@@ -23,9 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SmrDataRepository {
 
     private final SmrDao smrDao;
-    private List<Smr> smrsFromApi;
-    private LiveData<Smr> smrFromSqlite;
-    private LiveData<List<Smr>> smrsFromSqlite;
 
     public SmrDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -33,65 +32,89 @@ public class SmrDataRepository {
     }
 
     // ACTION SUR WEB SERVICE
-
     /**
-     * Fetch Smr list from pillll WebService by code cis
+     * Refresh Smr list from pillll WebService by code cis
      * @param idCodeCis
      */
-    private void fetchSmrsFromApiByCodeCis(Long idCodeCis){
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    public void refreshSmrs(Long idCodeCis) {
 
-        PillllWebService smrWebService = retrofit.create(PillllWebService.class);
-        Call<List<Smr>> call = smrWebService.listSmr(idCodeCis);
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<List<Smr>> call = pillllApi.listSmr(idCodeCis);
+
         call.enqueue(new Callback<List<Smr>>() {
             @Override
             public void onResponse(Call<List<Smr>> call, Response<List<Smr>> response) {
-                if (!response.body().isEmpty()){ smrsFromApi = response.body(); }
+                if (response.isSuccessful()){
+                    for (Smr smr : response.body()) {
+                        persistSmr(smr);
+                    }
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<List<Smr>> call, Throwable t) {
                 // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
+
     }
 
     /**
-     * * Get a list of Smr from pillll WebService by code cis
-     * @param idCodeCis
-     * @return
+     * Persist Smr data from Sqlite database in AsyncTask.
+     *
+     * @param smr
      */
-    public List<Smr> getSmrsFromApiByCodeCis(Long idCodeCis) {
-        if (smrsFromApi.isEmpty()){
-            fetchSmrsFromApiByCodeCis(idCodeCis);
-        }
-        return smrsFromApi;
-    }
+    private void persistSmr(Smr smr){
 
-    /**
-     * Get a list of Smr from pillll WebService by code cis and persist it into Sqlite database
-     * @param specialiteIdCodeCis
-     * @return List Smr
-     */
-    public LiveData<List<Smr>> getPersistableSmrsFromApiByCodeCis(Long specialiteIdCodeCis){
-        if (smrsFromApi.isEmpty()){
-            fetchSmrsFromApiByCodeCis(specialiteIdCodeCis);
-        }
-        if (!smrsFromApi.isEmpty()){
-            for (int i = 0; i < this.smrsFromApi.size(); i++) {
-                getSmrsFromSqliteById(smrsFromApi.get(i).getId());
-                if (smrFromSqlite.getValue().equals(null)){
-                    insertSmr(smrsFromApi.get(i));
-                }else {
-                    updateSmr(smrsFromApi.get(i));
+        new AsyncTask<Smr, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Smr... smrs) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertSmr(smrs[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateSmr(smrs[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
                 }
+                return true;
             }
-        }
-        return getSmrsFromSqliteByCodeCis(specialiteIdCodeCis);
+
+        }.execute(smr);
     }
 
     // ACTION SUR SQLITE DB
@@ -100,9 +123,8 @@ public class SmrDataRepository {
      * @param id
      * @return list of smr
      */
-    public LiveData<Smr> getSmrsFromSqliteById(long id){
-        this.smrFromSqlite = this.smrDao.selectSmrById(id);
-        return this.smrFromSqlite;
+    public LiveData<Smr> getSmrsById(long id){
+        return this.smrDao.selectSmrById(id);
     }
 
     /**
@@ -110,9 +132,8 @@ public class SmrDataRepository {
      * @param specialiteIdCodeCis
      * @return list of smr
      */
-    public LiveData<List<Smr>> getSmrsFromSqliteByCodeCis(long specialiteIdCodeCis){
-        this.smrsFromSqlite = this.smrDao.selectSmrByCodeCis(specialiteIdCodeCis);
-        return this.smrsFromSqlite;
+    public LiveData<List<Smr>> getSmrsByCodeCis(long specialiteIdCodeCis){
+        return this.smrDao.selectSmrByCodeCis(specialiteIdCodeCis);
     }
 
     /**

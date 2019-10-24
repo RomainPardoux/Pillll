@@ -2,7 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
+import android.os.AsyncTask;
+import android.util.Log;
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
@@ -12,8 +13,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to TitulaireSpecialite data sources.
@@ -24,9 +23,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class TitulaireSpecialiteDataRepository {
 
     private final TitulaireSpecialiteDao titulaireSpecialiteDao;
-    private List<TitulaireSpecialite> titulaireSpecialitesFromApi;
-    private LiveData<TitulaireSpecialite> titulaireSpecialiteFromSqlite;
-    private LiveData<List<TitulaireSpecialite>> titulaireSpecialitesFromSqlite;
 
     public TitulaireSpecialiteDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -34,125 +30,135 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     // ACTION SUR WEB SERVICE
-
     /**
-     * Fetch TitulaireSpecialite list from pillll WebService by code cis
-     *
+     * Refresh TitulaireSpecialite list from pillll WebService by code cis
      * @param idCodeCis
      */
-    private void fetchTitulaireSpecialitesFromApiByCodeCis(Long idCodeCis) {
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    public void refreshTitulaireSpecialites(Long idCodeCis) {
 
-
-        PillllWebService titulaireSpecialiteWebService = retrofit.create(PillllWebService.class);
-        Call<List<TitulaireSpecialite>> call = titulaireSpecialiteWebService.listTitulaireSpecialite(idCodeCis);
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<List<TitulaireSpecialite>> call = pillllApi.listTitulaireSpecialite(idCodeCis);
 
         call.enqueue(new Callback<List<TitulaireSpecialite>>() {
             @Override
             public void onResponse(Call<List<TitulaireSpecialite>> call, Response<List<TitulaireSpecialite>> response) {
-                if (!response.body().isEmpty()) {
-                    titulaireSpecialitesFromApi = response.body();
+                if (response.isSuccessful()){
+                    for (TitulaireSpecialite titulaireSpecialite : response.body()) {
+                        persistTitulaireSpecialite(titulaireSpecialite);
+                    }
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<TitulaireSpecialite>> call, Throwable t) {
                 // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
+
     }
 
     /**
-     * * Get a list of TitulaireSpecialite from pillll WebService by code cis
+     * Persist TitulaireSpecialite data from Sqlite database in AsyncTask.
      *
-     * @param idCodeCis
-     * @return
+     * @param titulaireSpecialite
      */
-    public List<TitulaireSpecialite> getTitulaireSpecialitesFromApiByCodeCis(Long idCodeCis) {
-        if (titulaireSpecialitesFromApi.isEmpty()) {
-            fetchTitulaireSpecialitesFromApiByCodeCis(idCodeCis);
-        }
-        return titulaireSpecialitesFromApi;
-    }
+    private void persistTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite){
 
-    /**
-     * Get a list of TitulaireSpecialite from pillll WebService by code cis and persist it into Sqlite database
-     *
-     * @param specialiteIdCodeCis
-     * @return List TitulaireSpecialite
-     */
-    public LiveData<List<TitulaireSpecialite>> getPersistableTitulaireSpecialitesFromApiByCodeCis(Long specialiteIdCodeCis) {
-        if (titulaireSpecialitesFromApi.isEmpty()) {
-            fetchTitulaireSpecialitesFromApiByCodeCis(specialiteIdCodeCis);
-        }
-        if (!titulaireSpecialitesFromApi.isEmpty()) {
-            for (int i = 0; i < this.titulaireSpecialitesFromApi.size(); i++) {
-                getTitulaireSpecialitesFromSqliteById(titulaireSpecialitesFromApi.get(i).getId());
-                if (titulaireSpecialiteFromSqlite.getValue().equals(null)) {
-                    insertTitulaireSpecialite(titulaireSpecialitesFromApi.get(i));
-                } else {
-                    updateTitulaireSpecialite(titulaireSpecialitesFromApi.get(i));
+        new AsyncTask<TitulaireSpecialite, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(TitulaireSpecialite... titulaireSpecialites) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertTitulaireSpecialite(titulaireSpecialites[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateTitulaireSpecialite(titulaireSpecialites[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
                 }
+                return true;
             }
-        }
-        return getTitulaireSpecialitesFromSqliteByCodeCis(specialiteIdCodeCis);
+
+        }.execute(titulaireSpecialite);
     }
 
     // ACTION SUR SQLITE DB
-
     /**
      * Get a list of TitulaireSpecialite from Sqlite database by titulaireSpecialite id.
      *
      * @param id
      * @return list of titulaireSpecialite
      */
-    public LiveData<TitulaireSpecialite> getTitulaireSpecialitesFromSqliteById(long id) {
-        this.titulaireSpecialiteFromSqlite = this.titulaireSpecialiteDao.selectTitulaireSpecialiteById(id);
-        return this.titulaireSpecialiteFromSqlite;
+    public LiveData<TitulaireSpecialite> getTitulaireSpecialitesById(long id){
+        return this.titulaireSpecialiteDao.selectTitulaireSpecialiteById(id);
     }
 
     /**
      * Get a list of TitulaireSpecialite from Sqlite database by code cis.
-     *
      * @param specialiteIdCodeCis
      * @return list of titulaireSpecialite
      */
-    public LiveData<List<TitulaireSpecialite>> getTitulaireSpecialitesFromSqliteByCodeCis(long specialiteIdCodeCis) {
-        this.titulaireSpecialitesFromSqlite = this.titulaireSpecialiteDao.selectTitulaireSpecialiteByCodeCis(specialiteIdCodeCis);
-        return this.titulaireSpecialitesFromSqlite;
+    public LiveData<List<TitulaireSpecialite>> getTitulaireSpecialitesByCodeCis(long specialiteIdCodeCis){
+        return this.titulaireSpecialiteDao.selectTitulaireSpecialiteByCodeCis(specialiteIdCodeCis);
     }
 
     /**
      * Insert TitulaireSpecialite into Sqlite database.
-     *
      * @param titulaireSpecialite
      * @return
      */
-    public long insertTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite) {
+    public long insertTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite){
         return this.titulaireSpecialiteDao.insertTitulaireSpecialite(titulaireSpecialite);
     }
 
     /**
      * Update TitulaireSpecialite from Sqlite database
-     *
      * @param titulaireSpecialite
      * @return
      */
-    public int updateTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite) {
+    public int updateTitulaireSpecialite (TitulaireSpecialite titulaireSpecialite){
         return this.titulaireSpecialiteDao.updateTitulaireSpecialite(titulaireSpecialite);
     }
 
     /**
      * Delete TitulaireSpecialite from Sqlite database
-     *
      * @param titulaireSpecialite
      * @return
      */
-    public int deleteTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite) {
+    public int deleteTitulaireSpecialite (TitulaireSpecialite titulaireSpecialite){
         return this.titulaireSpecialiteDao.deleteTitulaireSpecialite(titulaireSpecialite);
     }
 }

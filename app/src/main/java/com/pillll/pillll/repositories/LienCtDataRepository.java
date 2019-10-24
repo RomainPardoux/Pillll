@@ -2,7 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
+import android.os.AsyncTask;
+import android.util.Log;
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
@@ -11,8 +12,6 @@ import com.pillll.pillll.database.entity.LienCt;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to LienCt data sources.
@@ -22,8 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LienCtDataRepository {
 
     private final LienCtDao lienCtDao;
-    private LienCt lienCtFromApi;
-    private LiveData<LienCt> lienCtFromSqlite;
 
     public LienCtDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -33,71 +30,98 @@ public class LienCtDataRepository {
     // ACTION SUR WEB SERVICE
 
     /**
-     * Fetch LienCt data from pillll WebService by code cis
+     * Refresh LienCt data from pillll WebService by code dossier has
      *
      * @param codeDossierHas
      */
-    private void fetchLienCtFromApiByCodeHas(String codeDossierHas) {
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    public void refreshLienCt(String codeDossierHas) {
 
-        PillllWebService lienCtWebService = retrofit.create(PillllWebService.class);
-        Call<LienCt> call = lienCtWebService.getLienCt(codeDossierHas);
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<LienCt> call = pillllApi.getLienCt(codeDossierHas);
+
         call.enqueue(new Callback<LienCt>() {
             @Override
             public void onResponse(Call<LienCt> call, Response<LienCt> response) {
-                lienCtFromApi = response.body();
+                if (response.isSuccessful()){
+                    persistLienCt(response.body());
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<LienCt> call, Throwable t) {
                 // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
     }
 
     /**
-     * Get LienCt data from pillll WebService by code Has
+     * Persist LienCt data from Sqlite database in AsyncTask.
      *
-     * @param codeDossierHas
-     * @return LienCt
+     * @param lienCt
      */
-    public LienCt getLienCtFromApiByCodeHas(String codeDossierHas) {
-        fetchLienCtFromApiByCodeHas(codeDossierHas);
-        return lienCtFromApi;
-    }
+    private void persistLienCt(LienCt lienCt){
 
-    /**
-     * Get LienCt data from pillll WebService by code has and persist it into Sqlite database
-     *
-     * @param codeDossierHas
-     * @return LiveData LienCt
-     */
-    public LiveData<LienCt> getPersistableLienCtFromApiByCodeHas(String codeDossierHas) {
-        fetchLienCtFromApiByCodeHas(codeDossierHas);
-        getLienCtFromSqliteByCodeHas(lienCtFromApi.getCodeDossierHas());
-        if (lienCtFromSqlite.getValue().equals(null)) {
-            insertLienCt(lienCtFromApi);
-        } else {
-            updateLienCt(lienCtFromApi);
-        }
-        return getLienCtFromSqliteByCodeHas(codeDossierHas);
+        new AsyncTask<LienCt, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(LienCt... lienCts) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertLienCt(lienCts[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateLienCt(lienCts[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
+                }
+                return true;
+            }
+
+        }.execute(lienCt);
     }
 
     // ACTION SUR SQLITE DB
 
     /**
-     * Get LienCt data from Sqlite database by code cis.
+     * Get LienCt data from Sqlite database by code dossier has.
      *
-     * @param idCodeHas
+     * @param codeDossierHas
      * @return liveData lienCt
      */
-    public LiveData<LienCt> getLienCtFromSqliteByCodeHas(String idCodeHas){
-        this.lienCtFromSqlite = this.lienCtDao.selectLienCtByIdCodeDossierHas(idCodeHas);
-        return this.lienCtFromSqlite;
+    public LiveData<LienCt> getLienCtByCodeHas(String codeDossierHas) {
+        return this.lienCtDao.selectLienCtByIdCodeDossierHas(codeDossierHas);
     }
 
     /**

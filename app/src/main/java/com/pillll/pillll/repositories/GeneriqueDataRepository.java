@@ -2,7 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
+import android.os.AsyncTask;
+import android.util.Log;
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
@@ -11,8 +12,6 @@ import com.pillll.pillll.database.entity.Generique;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Generique data sources.
@@ -23,8 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GeneriqueDataRepository {
 
     private final GeneriqueDao generiqueDao;
-    private Generique generiqueFromApi;
-    private LiveData<Generique> generiqueFromSqlite;
 
     public GeneriqueDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -34,59 +31,87 @@ public class GeneriqueDataRepository {
     // ACTION SUR WEB SERVICE
 
     /**
-     * Fetch Generique data from pillll WebService by code cis
+     * Refresh Generique data from pillll WebService by code cis
      *
      * @param idCodeCis
      */
-    private void fetchGeneriqueFromApiByCodeCis(Long idCodeCis) {
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    public void refreshGenerique(Long idCodeCis) {
 
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<Generique> call = pillllApi.listGenerique(idCodeCis);
 
-        PillllWebService generiqueWebService = retrofit.create(PillllWebService.class);
-        Call<Generique> call = generiqueWebService.listGenerique(idCodeCis);
         call.enqueue(new Callback<Generique>() {
             @Override
             public void onResponse(Call<Generique> call, Response<Generique> response) {
-                generiqueFromApi = response.body();
+                if (response.isSuccessful()){
+                    persistGenerique(response.body());
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<Generique> call, Throwable t) {
                 // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
+
     }
 
     /**
-     * Get Generique data from pillll WebService by code cis
+     * Persist Generique data from Sqlite database in AsyncTask.
      *
-     * @param idCodeCis
-     * @return Generique
+     * @param generique
      */
-    public Generique getGeneriqueFromApiByCodeCis(Long idCodeCis) {
-        fetchGeneriqueFromApiByCodeCis(idCodeCis);
-        return generiqueFromApi;
-    }
+    private void persistGenerique(Generique generique){
 
-    /**
-     * Get Generique data from pillll WebService by code cis and persist it into Sqlite database
-     *
-     * @param specialiteIdCodeCis
-     * @return LiveData Generique
-     */
-    public LiveData<Generique> getPersistableGeneriqueFromApiByCodeCis(Long specialiteIdCodeCis) {
-        fetchGeneriqueFromApiByCodeCis(specialiteIdCodeCis);
-        getGeneriqueFromSqliteByCodeCis(generiqueFromApi.getSpecialiteIdCodeCis());
-        if (generiqueFromSqlite.getValue().equals(null)) {
-            insertGenerique(generiqueFromApi);
-        } else {
-            updateGenerique(generiqueFromApi);
-        }
-        return getGeneriqueFromSqliteByCodeCis(specialiteIdCodeCis);
+        new AsyncTask<Generique, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Generique... generiques) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertGenerique(generiques[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateGenerique(generiques[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
+                }
+                return true;
+            }
+
+        }.execute(generique);
     }
 
     // ACTION SUR SQLITE DB
@@ -97,9 +122,8 @@ public class GeneriqueDataRepository {
      * @param specialiteIdCodeCis
      * @return liveData generique
      */
-    public LiveData<Generique> getGeneriqueFromSqliteByCodeCis(long specialiteIdCodeCis) {
-        this.generiqueFromSqlite = this.generiqueDao.selectGeneriqueByCodeCis(specialiteIdCodeCis);
-        return this.generiqueFromSqlite;
+    public LiveData<Generique> getGeneriqueByCodeCis(long specialiteIdCodeCis) {
+        return this.generiqueDao.selectGeneriqueByCodeCis(specialiteIdCodeCis);
     }
 
     /**

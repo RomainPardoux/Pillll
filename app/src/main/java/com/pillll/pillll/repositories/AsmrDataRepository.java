@@ -2,7 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-
+import android.os.AsyncTask;
+import android.util.Log;
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
@@ -12,8 +13,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Asmr data sources.
@@ -23,9 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AsmrDataRepository {
 
     private final AsmrDao asmrDao;
-    private List<Asmr> asmrsFromApi;
-    private LiveData<Asmr> asmrFromSqlite;
-    private LiveData<List<Asmr>> asmrsFromSqlite;
 
     public AsmrDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -34,63 +30,88 @@ public class AsmrDataRepository {
 
     // ACTION SUR WEB SERVICE
     /**
-     * Fetch Asmr list from pillll WebService by code cis
+     * Refresh Asmr list from pillll WebService by code cis
      * @param idCodeCis
      */
-    private void fetchAsmrsFromApiByCodeCis(Long idCodeCis){
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    public void refreshAsmrs(Long idCodeCis) {
 
-        PillllWebService asmrWebService = retrofit.create(PillllWebService.class);
-        Call<List<Asmr>> call = asmrWebService.listAsmr(idCodeCis);
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<List<Asmr>> call = pillllApi.listAsmr(idCodeCis);
+
         call.enqueue(new Callback<List<Asmr>>() {
             @Override
             public void onResponse(Call<List<Asmr>> call, Response<List<Asmr>> response) {
-                if (!response.body().isEmpty()){ asmrsFromApi = response.body(); }
+                if (response.isSuccessful()){
+                    for (Asmr asmr : response.body()) {
+                        persistAsmr(asmr);
+                    }
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<List<Asmr>> call, Throwable t) {
                 // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
+
     }
 
     /**
-     * * Get a list of Asmr from pillll WebService by code cis
-     * @param idCodeCis
-     * @return
+     * Persist Asmr data from Sqlite database in AsyncTask.
+     *
+     * @param asmr
      */
-    public List<Asmr> getAsmrsFromApiByCodeCis(Long idCodeCis) {
-        if (asmrsFromApi.isEmpty()){
-            fetchAsmrsFromApiByCodeCis(idCodeCis);
-        }
-        return asmrsFromApi;
-    }
+    private void persistAsmr(Asmr asmr){
 
-    /**
-     * Get a list of Asmr from pillll WebService by code cis and persist it into Sqlite database
-     * @param specialiteIdCodeCis
-     * @return List Asmr
-     */
-    public LiveData<List<Asmr>> getPersistableAsmrsFromApiByCodeCis(Long specialiteIdCodeCis){
-        if (asmrsFromApi.isEmpty()){
-            fetchAsmrsFromApiByCodeCis(specialiteIdCodeCis);
-        }
-        if (!asmrsFromApi.isEmpty()){
-            for (int i = 0; i < this.asmrsFromApi.size(); i++) {
-                getAsmrsFromSqliteById(asmrsFromApi.get(i).getId());
-                if (asmrFromSqlite.getValue().equals(null)){
-                    insertAsmr(asmrsFromApi.get(i));
-                }else {
-                    updateAsmr(asmrsFromApi.get(i));
+        new AsyncTask<Asmr, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Asmr... asmrs) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertAsmr(asmrs[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateAsmr(asmrs[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
                 }
+                return true;
             }
-        }
-        return getAsmrsFromSqliteByCodeCis(specialiteIdCodeCis);
+
+        }.execute(asmr);
     }
 
     // ACTION SUR SQLITE DB
@@ -99,9 +120,8 @@ public class AsmrDataRepository {
      * @param id
      * @return list of asmr
      */
-    public LiveData<Asmr> getAsmrsFromSqliteById(long id){
-        this.asmrFromSqlite = this.asmrDao.selectAsmrById(id);
-        return this.asmrFromSqlite;
+    public LiveData<Asmr> getAsmrsById(long id){
+        return this.asmrDao.selectAsmrById(id);
     }
 
     /**
@@ -109,9 +129,8 @@ public class AsmrDataRepository {
      * @param specialiteIdCodeCis
      * @return list of asmr
      */
-    public LiveData<List<Asmr>> getAsmrsFromSqliteByCodeCis(long specialiteIdCodeCis){
-        this.asmrsFromSqlite = this.asmrDao.selectAsmrByCodeCis(specialiteIdCodeCis);
-        return this.asmrsFromSqlite;
+    public LiveData<List<Asmr>> getAsmrsByCodeCis(long specialiteIdCodeCis){
+        return this.asmrDao.selectAsmrByCodeCis(specialiteIdCodeCis);
     }
 
     /**

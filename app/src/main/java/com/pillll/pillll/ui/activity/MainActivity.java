@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.idCodeCisArea);
         textView = findViewById(R.id.denomination_textView);
         specialiteDetailViewModel = ViewModelProviders.of(this).get(SpecialiteDetailViewModel.class);
-        /*textView.setText(specialiteDetailViewModel.getText().getValue());*/
         specialiteDetailViewModel.refreshPresentation("2756239");
         specialiteDetailViewModel.getCurrentPresentations("2756239").observeForever(new Observer<Presentation>() {
             @Override
@@ -54,29 +53,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        /*specialiteDetailViewModel.getCurrentPresentations("2756239").observeForever(this, new Observer<Presentation>() {
-            @Override
-            public void onChanged(@Nullable Presentation presentation) {
-                Log.d(this.getClass().getCanonicalName(), "onChanged");
-                if (presentation != null){
-                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
-                    textView.setText(presentation.getLibelle());
-                }
-            }
-        });
-        *//*specialiteDetailViewModel.initViewModel("2756239");
-        currentPresentation = specialiteDetailViewModel.getCurrentPresentations();
-        currentPresentation.observe(this, new Observer<Presentation>() {
-            @Override
-            public void onChanged(@Nullable Presentation presentation) {
-                Log.d(this.getClass().getCanonicalName(), "onChanged");
-                if (presentation != null){
-                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
-                    textView.setText(presentation.getLibelle());
-                }
-            }
-        });
-*/
     }
 
 /*    public void getDataFromApi(View view) {

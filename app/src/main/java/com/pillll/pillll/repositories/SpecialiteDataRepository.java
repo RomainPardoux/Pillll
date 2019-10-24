@@ -2,8 +2,8 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 import android.util.Log;
-
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
@@ -12,8 +12,6 @@ import com.pillll.pillll.database.entity.Specialite;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Specialite data sources.
@@ -24,8 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SpecialiteDataRepository {
 
     private final SpecialiteDao specialiteDao;
-    private Specialite specialiteFromApi;
-    private LiveData<Specialite> specialiteFromSqlite;
 
     public SpecialiteDataRepository(Application application) {
         PillllDatabase db = PillllDatabase.getInstance(application);
@@ -35,61 +31,87 @@ public class SpecialiteDataRepository {
     // ACTION SUR WEB SERVICE
 
     /**
-     * Fetch Specialite data from pillll WebService by code cis
+     * Refresh Specialite data from pillll WebService by code cis
      *
      * @param idCodeCis
      */
-    private void fetchSpecialiteFromApiByCodeCis(Long idCodeCis) {
+    public void refreshSpecialite(Long idCodeCis) {
 
-        // Build Retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NetworkService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        // Get instance of pillllApi
+        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
+        Call<Specialite> call = pillllApi.getSpecialiteWithCodeCis(idCodeCis);
 
-        PillllWebService specialiteWebService = retrofit.create(PillllWebService.class);
-
-        Call<Specialite> call = specialiteWebService.getSpecialiteWithCodeCis(idCodeCis);
         call.enqueue(new Callback<Specialite>() {
             @Override
             public void onResponse(Call<Specialite> call, Response<Specialite> response) {
-                specialiteFromApi = response.body();
-                Log.d("msg", response.body().getDenomination());
+                if (response.isSuccessful()){
+                    persistSpecialite(response.body());
+                }else {
+                    //error case
+                    switch (response.code()){
+                        case 404:
+                            Log.d("error", "not found");
+                            break;
+                        case 500:
+                            Log.d("error", "not logged in or server broken");
+                            break;
+                        default:
+                            Log.d("error","unknown error");
+                            break;
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<Specialite> call, Throwable t) {
-                Log.d("msg", "fail");
+                // action à effectuer en cas d'echec
+                Log.d("error","failure");
             }
         });
+
     }
 
     /**
-     * Get Specialite data from pillll WebService by code cis
+     * Persist Specialite data from Sqlite database in AsyncTask.
      *
-     * @param idCodeCis
-     * @return Specialite
+     * @param specialite
      */
-    public Specialite getSpecialiteFromApiByCodeCis(Long idCodeCis) {
-        fetchSpecialiteFromApiByCodeCis(idCodeCis);
-        return specialiteFromApi;
-    }
+    private void persistSpecialite(Specialite specialite){
 
-    /**
-     * Get Specialite data from pillll WebService by code cis and persist it into Sqlite database
-     *
-     * @param specialiteIdCodeCis
-     * @return LiveData Specialite
-     */
-    public LiveData<Specialite> getPersistableSpecialiteFromApiByCodeCis(Long specialiteIdCodeCis) {
-        fetchSpecialiteFromApiByCodeCis(specialiteIdCodeCis);
-        getSpecialiteFromSqliteByCodeCis(specialiteFromApi.getIdCodeCis());
-        if (specialiteFromSqlite.getValue().equals(null)) {
-            insertSpecialite(specialiteFromApi);
-        } else {
-            updateSpecialite(specialiteFromApi);
-        }
-        return getSpecialiteFromSqliteByCodeCis(specialiteIdCodeCis);
+        new AsyncTask<Specialite, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Specialite... specialites) {
+                boolean insertedOrUpdated = false;
+                long inserted = 0;
+                int updated;
+                try {
+                    inserted = insertSpecialite(specialites[0]);
+                    if (inserted != 0){
+                        insertedOrUpdated = true;
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally{
+                    if (inserted == 0){
+                        try {
+                            updated = updateSpecialite(specialites[0]);
+                            if (updated > 0){
+                                insertedOrUpdated = true;
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            return insertedOrUpdated;
+                        }
+                    }
+                }
+                return true;
+            }
+
+        }.execute(specialite);
     }
 
     // ACTION SUR SQLITE DB
@@ -100,9 +122,8 @@ public class SpecialiteDataRepository {
      * @param specialiteIdCodeCis
      * @return liveData specialite
      */
-    public LiveData<Specialite> getSpecialiteFromSqliteByCodeCis(long specialiteIdCodeCis) {
-        this.specialiteFromSqlite = this.specialiteDao.selectSpecialiteById(specialiteIdCodeCis);
-        return this.specialiteFromSqlite;
+    public LiveData<Specialite> getSpecialiteByCodeCis(long specialiteIdCodeCis) {
+        return this.specialiteDao.selectSpecialiteById(specialiteIdCodeCis);
     }
 
     /**
