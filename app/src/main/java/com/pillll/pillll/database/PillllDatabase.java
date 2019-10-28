@@ -36,7 +36,7 @@ import com.pillll.pillll.database.entity.VoiesAdministration;
 
 @Database(entities = {Specialite.class, Composition.class, Presentation.class, Asmr.class, ConditionPrescription.class,
         Generique.class, InfoImportante.class, LienCt.class, Smr.class, TitulaireSpecialite.class, VoiesAdministration.class},
-        version = 1, exportSchema = false)
+        version = 2, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class PillllDatabase extends RoomDatabase {
 

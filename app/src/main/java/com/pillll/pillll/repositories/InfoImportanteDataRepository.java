@@ -9,6 +9,8 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.InfoImportanteDao;
 import com.pillll.pillll.database.entity.InfoImportante;
+import com.pillll.pillll.database.entity.InfosImportantes;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,13 +40,13 @@ public class InfoImportanteDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<InfoImportante>> call = pillllApi.listInfoImportante(idCodeCis);
+        Call<InfosImportantes> call = pillllApi.listInfoImportante(idCodeCis);
 
-        call.enqueue(new Callback<List<InfoImportante>>() {
+        call.enqueue(new Callback<InfosImportantes>() {
             @Override
-            public void onResponse(Call<List<InfoImportante>> call, Response<List<InfoImportante>> response) {
+            public void onResponse(Call<InfosImportantes> call, Response<InfosImportantes> response) {
                 if (response.isSuccessful()){
-                    for (InfoImportante infoImportante : response.body()) {
+                    for (InfoImportante infoImportante : response.body().getData()) {
                         persistInfoImportante(infoImportante);
                     }
                 }else {
@@ -64,7 +66,7 @@ public class InfoImportanteDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<InfoImportante>> call, Throwable t) {
+            public void onFailure(Call<InfosImportantes> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }

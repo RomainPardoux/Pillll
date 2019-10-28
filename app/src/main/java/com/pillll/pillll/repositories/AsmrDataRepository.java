@@ -9,6 +9,7 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.AsmrDao;
 import com.pillll.pillll.database.entity.Asmr;
+import com.pillll.pillll.database.entity.Asmrs;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,13 +38,13 @@ public class AsmrDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<Asmr>> call = pillllApi.listAsmr(idCodeCis);
+        Call<Asmrs> call = pillllApi.listAsmr(idCodeCis);
 
-        call.enqueue(new Callback<List<Asmr>>() {
+        call.enqueue(new Callback<Asmrs>() {
             @Override
-            public void onResponse(Call<List<Asmr>> call, Response<List<Asmr>> response) {
+            public void onResponse(Call<Asmrs> call, Response<Asmrs> response) {
                 if (response.isSuccessful()){
-                    for (Asmr asmr : response.body()) {
+                    for (Asmr asmr : response.body().getData()) {
                         persistAsmr(asmr);
                     }
                 }else {
@@ -63,12 +64,11 @@ public class AsmrDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Asmr>> call, Throwable t) {
+            public void onFailure(Call<Asmrs> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }
         });
-
     }
 
     /**

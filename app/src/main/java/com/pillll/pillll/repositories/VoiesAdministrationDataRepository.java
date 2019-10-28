@@ -9,6 +9,7 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.VoiesAdministrationDao;
 import com.pillll.pillll.database.entity.VoiesAdministration;
+import com.pillll.pillll.database.entity.VoiesAdministrations;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,13 +39,13 @@ public class VoiesAdministrationDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<VoiesAdministration>> call = pillllApi.listVoiesAdministration(idCodeCis);
+        Call<VoiesAdministrations> call = pillllApi.listVoiesAdministration(idCodeCis);
 
-        call.enqueue(new Callback<List<VoiesAdministration>>() {
+        call.enqueue(new Callback<VoiesAdministrations>() {
             @Override
-            public void onResponse(Call<List<VoiesAdministration>> call, Response<List<VoiesAdministration>> response) {
+            public void onResponse(Call<VoiesAdministrations> call, Response<VoiesAdministrations> response) {
                 if (response.isSuccessful()){
-                    for (VoiesAdministration voiesAdministration : response.body()) {
+                    for (VoiesAdministration voiesAdministration : response.body().getData()) {
                         persistVoiesAdministration(voiesAdministration);
                     }
                 }else {
@@ -64,12 +65,11 @@ public class VoiesAdministrationDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<VoiesAdministration>> call, Throwable t) {
+            public void onFailure(Call<VoiesAdministrations> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }
         });
-
     }
 
     /**

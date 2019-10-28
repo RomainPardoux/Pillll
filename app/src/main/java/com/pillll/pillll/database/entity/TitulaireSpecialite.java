@@ -27,7 +27,7 @@ public class TitulaireSpecialite {
     @Expose
     private String titulaire;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

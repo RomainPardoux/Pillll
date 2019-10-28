@@ -17,9 +17,9 @@
         android:id="@+id/searchFromApi_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="getDataFromApi"
+        android:onClick="getData"
         android:paddingBottom="20dp"
-        android:text="Get Data From Api" />
+        android:text="Get Data" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,6 +32,18 @@
 
             <TextView
                 android:id="@+id/denomination_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/denomination_specialite_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/denomination_substance_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp" />

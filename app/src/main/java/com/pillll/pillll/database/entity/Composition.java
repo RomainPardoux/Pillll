@@ -19,40 +19,40 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         indices = {@Index(value = {"specialite_id_code_cis"})})
 public class Composition {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private long id;
     @ColumnInfo(name = "element_pharmaceutique")
-    @SerializedName("elementPharmaceutique")
+    @SerializedName("element_pharmaceutique")
     @Expose
     private String elementPharmaceutique;
     @ColumnInfo(name = "code_substance")
-    @SerializedName("codeSubstance")
+    @SerializedName("code_substance")
     @Expose
     private String codeSubstance;
     @ColumnInfo(name = "denomination_substance")
-    @SerializedName("denominationSubstance")
+    @SerializedName("denomination_substance")
     @Expose
     private String denominationSubstance;
     @ColumnInfo(name = "dosage_substance")
-    @SerializedName("dosageSubstance")
+    @SerializedName("dosage_substance")
     @Expose
     private String dosageSubstance;
     @ColumnInfo(name = "reference_dosage")
-    @SerializedName("referenceDosage")
+    @SerializedName("reference_dosage")
     @Expose
     private String referenceDosage;
     @ColumnInfo(name = "nature_composant")
-    @SerializedName("natureComposant")
+    @SerializedName("nature_composant")
     @Expose
     private String natureComposant;
     @ColumnInfo(name = "numero_liaison")
-    @SerializedName("numeroLiaison")
+    @SerializedName("numero_liaison")
     @Expose
     private int numeroLiaison;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialiteIdCodeCis")
+    @SerializedName("specialite_id_code_cis")
     @Expose
     private long specialiteIdCodeCis;
 

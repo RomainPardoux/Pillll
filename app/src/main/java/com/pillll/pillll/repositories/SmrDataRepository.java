@@ -4,18 +4,16 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.pillll.pillll.database.NetworkService;
 import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.SmrDao;
 import com.pillll.pillll.database.entity.Smr;
+import com.pillll.pillll.database.entity.Smrs;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Repository class that abstract access to Smr data sources.
@@ -40,13 +38,13 @@ public class SmrDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<Smr>> call = pillllApi.listSmr(idCodeCis);
+        Call<Smrs> call = pillllApi.listSmr(idCodeCis);
 
-        call.enqueue(new Callback<List<Smr>>() {
+        call.enqueue(new Callback<Smrs>() {
             @Override
-            public void onResponse(Call<List<Smr>> call, Response<List<Smr>> response) {
+            public void onResponse(Call<Smrs> call, Response<Smrs> response) {
                 if (response.isSuccessful()){
-                    for (Smr smr : response.body()) {
+                    for (Smr smr : response.body().getData()) {
                         persistSmr(smr);
                     }
                 }else {
@@ -66,7 +64,7 @@ public class SmrDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Smr>> call, Throwable t) {
+            public void onFailure(Call<Smrs> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }

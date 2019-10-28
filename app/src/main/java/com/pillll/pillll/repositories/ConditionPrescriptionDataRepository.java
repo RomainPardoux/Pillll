@@ -9,6 +9,8 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.ConditionPrescriptionDao;
 import com.pillll.pillll.database.entity.ConditionPrescription;
+import com.pillll.pillll.database.entity.ConditionsPrescriptions;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,13 +39,13 @@ public class ConditionPrescriptionDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<ConditionPrescription>> call = pillllApi.listConditionPrescription(idCodeCis);
+        Call<ConditionsPrescriptions> call = pillllApi.listConditionPrescription(idCodeCis);
 
-        call.enqueue(new Callback<List<ConditionPrescription>>() {
+        call.enqueue(new Callback<ConditionsPrescriptions>() {
             @Override
-            public void onResponse(Call<List<ConditionPrescription>> call, Response<List<ConditionPrescription>> response) {
+            public void onResponse(Call<ConditionsPrescriptions> call, Response<ConditionsPrescriptions> response) {
                 if (response.isSuccessful()){
-                    for (ConditionPrescription conditionPrescription : response.body()) {
+                    for (ConditionPrescription conditionPrescription : response.body().getData()) {
                         persistConditionPrescription(conditionPrescription);
                     }
                 }else {
@@ -63,7 +65,7 @@ public class ConditionPrescriptionDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<ConditionPrescription>> call, Throwable t) {
+            public void onFailure(Call<ConditionsPrescriptions> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }

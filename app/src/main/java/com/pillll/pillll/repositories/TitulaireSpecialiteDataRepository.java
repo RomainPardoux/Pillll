@@ -9,6 +9,8 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.TitulaireSpecialiteDao;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
+import com.pillll.pillll.database.entity.TitulairesSpecialites;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,13 +40,13 @@ public class TitulaireSpecialiteDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<TitulaireSpecialite>> call = pillllApi.listTitulaireSpecialite(idCodeCis);
+        Call<TitulairesSpecialites> call = pillllApi.listTitulaireSpecialite(idCodeCis);
 
-        call.enqueue(new Callback<List<TitulaireSpecialite>>() {
+        call.enqueue(new Callback<TitulairesSpecialites>() {
             @Override
-            public void onResponse(Call<List<TitulaireSpecialite>> call, Response<List<TitulaireSpecialite>> response) {
+            public void onResponse(Call<TitulairesSpecialites> call, Response<TitulairesSpecialites> response) {
                 if (response.isSuccessful()){
-                    for (TitulaireSpecialite titulaireSpecialite : response.body()) {
+                    for (TitulaireSpecialite titulaireSpecialite : response.body().getData()) {
                         persistTitulaireSpecialite(titulaireSpecialite);
                     }
                 }else {
@@ -64,7 +66,7 @@ public class TitulaireSpecialiteDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<TitulaireSpecialite>> call, Throwable t) {
+            public void onFailure(Call<TitulairesSpecialites> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }

@@ -9,6 +9,8 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.CompositionDao;
 import com.pillll.pillll.database.entity.Composition;
+import com.pillll.pillll.database.entity.Compositions;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,13 +40,13 @@ public class CompositionDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<List<Composition>> call = pillllApi.listComposition(idCodeCis);
+        Call<Compositions> call = pillllApi.listComposition(idCodeCis);
 
-        call.enqueue(new Callback<List<Composition>>() {
+        call.enqueue(new Callback<Compositions>() {
             @Override
-            public void onResponse(Call<List<Composition>> call, Response<List<Composition>> response) {
+            public void onResponse(Call<Compositions> call, Response<Compositions> response) {
                 if (response.isSuccessful()){
-                    for (Composition composition : response.body()) {
+                    for (Composition composition : response.body().getData()) {
                         persistComposition(composition);
                     }
                 }else {
@@ -64,7 +66,7 @@ public class CompositionDataRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Composition>> call, Throwable t) {
+            public void onFailure(Call<Compositions> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }
@@ -121,7 +123,7 @@ public class CompositionDataRepository {
      * @param id
      * @return list of composition
      */
-    public LiveData<Composition> getCompositionsById(long id){
+    public LiveData<Composition> getCompositionById(long id){
         return this.compositionDao.selectCompositionById(id);
     }
 

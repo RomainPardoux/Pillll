@@ -10,79 +10,110 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.pillll.pillll.R;
-import com.pillll.pillll.database.PillllWebService;
+import com.pillll.pillll.database.entity.Composition;
 import com.pillll.pillll.database.entity.Presentation;
-import com.pillll.pillll.repositories.PresentationDataRepository;
+import com.pillll.pillll.database.entity.Specialite;
 import com.pillll.pillll.viewModel.SpecialiteDetailViewModel;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // REPOSITORIES
     private SpecialiteDetailViewModel specialiteDetailViewModel;
-    private LiveData<Presentation> currentPresentation;
     private EditText editText;
-    private TextView textView;
-
-    //TEST
-    private LiveData<String> text;
+    private TextView textViewPresentation;
+    private TextView textViewSpecialite;
+    private TextView textViewComposition;
+    private String libellePresentation;
+    private LiveData<Presentation> presentationLiveData;
+    private String libelleSpecialite;
+    private LiveData<Specialite> specialiteLiveData;
+    private LiveData<List<Composition>> compositionLiveData;
+    private List<Composition> compositions;
+    private List<String> denominationSubstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText = findViewById(R.id.idCodeCisArea);
-        textView = findViewById(R.id.denomination_textView);
+        textViewPresentation = findViewById(R.id.denomination_textView);
+        textViewSpecialite = findViewById(R.id.denomination_specialite_textView);
+        textViewComposition = findViewById(R.id.denomination_substance_textView);
         specialiteDetailViewModel = ViewModelProviders.of(this).get(SpecialiteDetailViewModel.class);
-        specialiteDetailViewModel.refreshPresentation("2756239");
-        specialiteDetailViewModel.getCurrentPresentations("2756239").observeForever(new Observer<Presentation>() {
+
+        // On charge les données du view model
+        presentationLiveData = specialiteDetailViewModel.getCurrentPresentation();
+        if (presentationLiveData != null){
+            libellePresentation = presentationLiveData.getValue().getLibelle();
+        }
+        if (libellePresentation != null){
+            textViewPresentation.setText(libellePresentation);
+        }else {
+            textViewPresentation.setText("");
+        }
+        specialiteLiveData = specialiteDetailViewModel.getCurrentSpecialite();
+        if (specialiteLiveData != null){
+            libelleSpecialite = specialiteLiveData.getValue().getDenomination();
+        }
+        if (libelleSpecialite != null){
+            textViewSpecialite.setText(libelleSpecialite);
+        }else {
+            textViewSpecialite.setText("");
+        }
+compositionLiveData = specialiteDetailViewModel.getCurrentCompositions();
+        if (compositionLiveData != null){
+            compositions = compositionLiveData.getValue();
+        }
+        if (compositions != null){
+            String denominationSubstance = "";
+            for (Composition composition: compositions) {
+                denominationSubstance += composition.getDenominationSubstance();
+                denominationSubstance += "  /  ";
+            }
+            textViewComposition.setText(denominationSubstance);
+        }else {
+            textViewComposition.setText("");
+        }
+    }
+
+    public void getData(View view) {
+
+        //On recupere le code cip 7 ou 13 du textView
+        String idCodeCip = editText.getText().toString();
+        specialiteDetailViewModel.refreshPresentation(idCodeCip);
+        specialiteDetailViewModel.getPresentation(idCodeCip).observeForever(new Observer<Presentation>() {
             @Override
             public void onChanged(@Nullable Presentation presentation) {
-                Log.d(this.getClass().getCanonicalName(), "onChanged");
                 if (presentation != null){
-                    Log.d(this.getClass().getCanonicalName(), "onChanged_presentationNotNull");
-                    textView.setText(presentation.getLibelle());
+                    textViewPresentation.setText(presentation.getLibelle());
+                    long idCodeCis = presentation.getSpecialiteIdCodeCis();
+                    specialiteDetailViewModel.refreshSpecialite(idCodeCis);
+                    specialiteDetailViewModel.getSpecialite(idCodeCis).observeForever(new Observer<Specialite>() {
+                        @Override
+                        public void onChanged(@Nullable Specialite specialite) {
+                            if (specialite != null){
+                                textViewSpecialite.setText(specialite.getDenomination());
+                            }
+                        }
+                    });
+                    specialiteDetailViewModel.refreshCompositions(idCodeCis);
+                    specialiteDetailViewModel.getCompositions(idCodeCis).observeForever(new Observer<List<Composition>>() {
+                        @Override
+                        public void onChanged(@Nullable List<Composition> compositions) {
+                            if (compositions != null){
+                                String denominationSubstance = "";
+                                for (Composition composition: compositions) {
+                                    denominationSubstance += composition.getDenominationSubstance();
+                                    denominationSubstance += "  /  ";
+                                }
+                                textViewComposition.setText(denominationSubstance);
+                            }
+                        }
+                    });
                 }
             }
         });
     }
-
-/*    public void getDataFromApi(View view) {
-
-        //IdCodeCis input
-        *//*String idCodeCip = editText.getText().toString();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(PillllWebService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        PillllWebService presentationWebService = retrofit.create(PillllWebService.class);
-
-        Call<Presentation> call = presentationWebService.getPresentationWithCodeCip7(idCodeCip);
-        call.enqueue(new Callback<Presentation>() {
-            @Override
-            public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                textView.setText(response.body().getLibelle());
-            }
-
-            @Override
-            public void onFailure(Call<Presentation> call, Throwable t) {
-                // action à effectuer en cas d'echec
-            }
-        });
-*//*
-
-        *//*specialiteDetailViewModel.initViewModel(idCodeCip);
-        currentPresentation = specialiteDetailViewModel.getCurrentPresentations();
-        textView.setText(currentPresentation.getValue().getLibelle());
-    *//*}*/
 }

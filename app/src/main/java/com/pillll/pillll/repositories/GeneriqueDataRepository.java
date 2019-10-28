@@ -9,6 +9,8 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.GeneriqueDao;
 import com.pillll.pillll.database.entity.Generique;
+import com.pillll.pillll.database.entity.Generiques;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,13 +41,15 @@ public class GeneriqueDataRepository {
 
         // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Generique> call = pillllApi.listGenerique(idCodeCis);
+        Call<Generiques> call = pillllApi.listGenerique(idCodeCis);
 
-        call.enqueue(new Callback<Generique>() {
+        call.enqueue(new Callback<Generiques>() {
             @Override
-            public void onResponse(Call<Generique> call, Response<Generique> response) {
+            public void onResponse(Call<Generiques> call, Response<Generiques> response) {
                 if (response.isSuccessful()){
-                    persistGenerique(response.body());
+                    for (Generique generique : response.body().getData() ) {
+                        persistGenerique(generique);
+                    }
                 }else {
                     //error case
                     switch (response.code()){
@@ -63,7 +67,7 @@ public class GeneriqueDataRepository {
             }
 
             @Override
-            public void onFailure(Call<Generique> call, Throwable t) {
+            public void onFailure(Call<Generiques> call, Throwable t) {
                 // action à effectuer en cas d'echec
                 Log.d("error","failure");
             }
