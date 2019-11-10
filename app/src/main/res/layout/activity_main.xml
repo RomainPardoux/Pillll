@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter ID Code Cis Here ..."
+        android:inputType="number"
         android:paddingBottom="20dp" />
 
     <Button
@@ -31,7 +32,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/denomination_textView"
+                android:id="@+id/denomination_presentation_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp" />
@@ -44,6 +45,54 @@
 
             <TextView
                 android:id="@+id/denomination_substance_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/smr_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/asmr_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/voies_administrations_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/info_importante_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/titulaire_specialite_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/lien_ct_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/generique_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp" />
+
+            <TextView
+                android:id="@+id/condition_prescription_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp" />

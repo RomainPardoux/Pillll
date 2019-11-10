@@ -7,12 +7,28 @@ import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.pillll.pillll.database.entity.Asmr;
 import com.pillll.pillll.database.entity.Composition;
+import com.pillll.pillll.database.entity.ConditionPrescription;
+import com.pillll.pillll.database.entity.Generique;
+import com.pillll.pillll.database.entity.InfoImportante;
+import com.pillll.pillll.database.entity.LienCt;
 import com.pillll.pillll.database.entity.Presentation;
+import com.pillll.pillll.database.entity.Smr;
 import com.pillll.pillll.database.entity.Specialite;
+import com.pillll.pillll.database.entity.TitulaireSpecialite;
+import com.pillll.pillll.database.entity.VoiesAdministration;
+import com.pillll.pillll.repositories.AsmrDataRepository;
 import com.pillll.pillll.repositories.CompositionDataRepository;
+import com.pillll.pillll.repositories.ConditionPrescriptionDataRepository;
+import com.pillll.pillll.repositories.GeneriqueDataRepository;
+import com.pillll.pillll.repositories.InfoImportanteDataRepository;
+import com.pillll.pillll.repositories.LienCtDataRepository;
 import com.pillll.pillll.repositories.PresentationDataRepository;
+import com.pillll.pillll.repositories.SmrDataRepository;
 import com.pillll.pillll.repositories.SpecialiteDataRepository;
+import com.pillll.pillll.repositories.TitulaireSpecialiteDataRepository;
+import com.pillll.pillll.repositories.VoiesAdministrationDataRepository;
 
 import java.util.List;
 
@@ -26,8 +42,31 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
     private PresentationDataRepository presentationDataSource;
     private SpecialiteDataRepository specialiteDataSource;
     private CompositionDataRepository compositionDataSource;
+    private AsmrDataRepository asmrDataSource;
+    private SmrDataRepository smrDataSource;
+    private ConditionPrescriptionDataRepository conditionPrescriptionDataSource;
+    private GeneriqueDataRepository generiqueDataSource;
+    private InfoImportanteDataRepository infoImportanteDataSource;
+    private LienCtDataRepository lienCtDataSource;
+    private TitulaireSpecialiteDataRepository titulaireSpecialiteDataSource;
+    private VoiesAdministrationDataRepository voiesAdministrationDataSource;
 
-
+    @Nullable
+    private LiveData<Generique> currentGenerique;
+    @Nullable
+    private LiveData<List<Asmr>> currentAsmrs;
+    @Nullable
+    private LiveData<List<Smr>> currentSmrs;
+    @Nullable
+    private LiveData<List<ConditionPrescription>> currentConditionsPrescriptions;
+    @Nullable
+    private LiveData<List<InfoImportante>> currentInfosImportantes;
+    @Nullable
+    private LiveData<LienCt> currentLienCt;
+    @Nullable
+    private LiveData<List<TitulaireSpecialite>> currentTitulaireSpecialites;
+    @Nullable
+    private LiveData<List<VoiesAdministration>> currentVoiesAdministrations;
     @Nullable
     private LiveData<List<Composition>> currentCompositions;
     @Nullable
@@ -41,6 +80,14 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
         this.presentationDataSource = new PresentationDataRepository(application);
         this.specialiteDataSource = new SpecialiteDataRepository(application);
         this.compositionDataSource = new CompositionDataRepository(application);
+        this.smrDataSource = new SmrDataRepository(application);
+        this.asmrDataSource = new AsmrDataRepository(application);
+        this.titulaireSpecialiteDataSource = new TitulaireSpecialiteDataRepository(application);
+        this.voiesAdministrationDataSource = new VoiesAdministrationDataRepository(application);
+        this.lienCtDataSource = new LienCtDataRepository(application);
+        this.conditionPrescriptionDataSource = new ConditionPrescriptionDataRepository(application);
+        this.infoImportanteDataSource = new InfoImportanteDataRepository(application);
+        this.generiqueDataSource = new GeneriqueDataRepository(application);
     }
 
     // REFRESH PUBLIC
@@ -50,6 +97,38 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
 
     public void refreshSpecialite(long idCodeCis){
         this.specialiteDataSource.refreshSpecialite(idCodeCis);
+    }
+
+    public void refreshAsmrs(long idCodeCis){
+        this.asmrDataSource.refreshAsmrs(idCodeCis);
+    }
+
+    public void refreshSmrs(long idCodeCis){
+        this.smrDataSource.refreshSmrs(idCodeCis);
+    }
+
+    public void refreshGeneriques(long idCodeCis){
+        this.generiqueDataSource.refreshGenerique(idCodeCis);
+    }
+
+    public void refreshInfosImportantes(long idCodeCis){
+        this.infoImportanteDataSource.refreshInfoImportantes(idCodeCis);
+    }
+
+    public void refreshConditionsPrescriptions(long idCodeCis){
+        this.conditionPrescriptionDataSource.refreshConditionPrescriptions(idCodeCis);
+    }
+
+    public void refreshVoiesAdministrations(long idCodeCis){
+        this.voiesAdministrationDataSource.refreshVoiesAdministrations(idCodeCis);
+    }
+
+    public void refreshTitulairesSpecialites(long idCodeCis){
+        this.titulaireSpecialiteDataSource.refreshTitulaireSpecialites(idCodeCis);
+    }
+
+    public void refreshLiensCts(String CodeDossierHas){
+        this.lienCtDataSource.refreshLienCt(CodeDossierHas);
     }
 
     public void refreshCompositions(long idCodeCis){
@@ -82,6 +161,46 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
         return currentCompositions;
     }
 
+    public LiveData<List<Smr>> getSmrs(long idCodeCis) {
+        currentSmrs = this.smrDataSource.getSmrsByCodeCis(idCodeCis);
+        return currentSmrs;
+    }
+
+    public LiveData<List<Asmr>> getAsmrs(long idCodeCis) {
+        currentAsmrs = this.asmrDataSource.getAsmrsByCodeCis(idCodeCis);
+        return currentAsmrs;
+    }
+
+    public LiveData<List<ConditionPrescription>> getConditionsPrescriptions(long idCodeCis) {
+        currentConditionsPrescriptions = this.conditionPrescriptionDataSource.getConditionPrescriptionsByCodeCis(idCodeCis);
+        return currentConditionsPrescriptions;
+    }
+
+    public LiveData<Generique> getGeneriques(long idCodeCis) {
+        currentGenerique= this.generiqueDataSource.getGeneriqueByCodeCis(idCodeCis);
+        return currentGenerique;
+    }
+
+    public LiveData<List<InfoImportante>> getInfosImportantes(long idCodeCis) {
+        currentInfosImportantes = this.infoImportanteDataSource.getInfoImportantesByCodeCis(idCodeCis);
+        return currentInfosImportantes;
+    }
+
+    public LiveData<LienCt> getLiensCts(String codeDossierHas) {
+        currentLienCt = this.lienCtDataSource.getLienCtByCodeHas(codeDossierHas);
+        return currentLienCt;
+    }
+
+    public LiveData<List<TitulaireSpecialite>> getTitulairesSpecialites(long idCodeCis) {
+        currentTitulaireSpecialites = this.titulaireSpecialiteDataSource.getTitulaireSpecialitesByCodeCis(idCodeCis);
+        return currentTitulaireSpecialites;
+    }
+
+    public LiveData<List<VoiesAdministration>> getVoiesAdministrations(long idCodeCis) {
+        currentVoiesAdministrations = this.voiesAdministrationDataSource.getVoiesAdministrationsByCodeCis(idCodeCis);
+        return currentVoiesAdministrations;
+    }
+
     // GET CURRENT DATA PUBLIC
 
     @Nullable
@@ -97,5 +216,45 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
     @Nullable
     public LiveData<Specialite> getCurrentSpecialite() {
         return currentSpecialite;
+    }
+
+    @Nullable
+    public LiveData<Generique> getCurrentGenerique() {
+        return currentGenerique;
+    }
+
+    @Nullable
+    public LiveData<List<Asmr>> getCurrentAsmrs() {
+        return currentAsmrs;
+    }
+
+    @Nullable
+    public LiveData<List<Smr>> getCurrentSmrs() {
+        return currentSmrs;
+    }
+
+    @Nullable
+    public LiveData<List<ConditionPrescription>> getCurrentConditionsPrescriptions() {
+        return currentConditionsPrescriptions;
+    }
+
+    @Nullable
+    public LiveData<List<InfoImportante>> getCurrentInfosImportantes() {
+        return currentInfosImportantes;
+    }
+
+    @Nullable
+    public LiveData<LienCt> getCurrentLienCt() {
+        return currentLienCt;
+    }
+
+    @Nullable
+    public LiveData<List<TitulaireSpecialite>> getCurrentTitulaireSpecialites() {
+        return currentTitulaireSpecialites;
+    }
+
+    @Nullable
+    public LiveData<List<VoiesAdministration>> getCurrentVoiesAdministrations() {
+        return currentVoiesAdministrations;
     }
 }

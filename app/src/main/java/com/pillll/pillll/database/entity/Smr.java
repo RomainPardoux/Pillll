@@ -22,9 +22,10 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         @ForeignKey(entity = LienCt.class, parentColumns = "code_dossier_has", childColumns = "lien_ct_code_dossier_has", onDelete = CASCADE, onUpdate = CASCADE)},
         indices = {@Index(value = {"lien_ct_code_dossier_has"}),
                 @Index(value = {"specialite_id_code_cis"})})
+
 public class Smr {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private long id;

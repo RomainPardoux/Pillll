@@ -19,7 +19,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         indices = {@Index(value = {"specialite_id_code_cis"})})
 public class TitulaireSpecialite {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private long id;
