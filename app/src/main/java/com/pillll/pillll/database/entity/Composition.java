@@ -6,9 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -20,40 +17,22 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Composition {
 
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private long id;
     @ColumnInfo(name = "element_pharmaceutique")
-    @SerializedName("element_pharmaceutique")
-    @Expose
     private String elementPharmaceutique;
     @ColumnInfo(name = "code_substance")
-    @SerializedName("code_substance")
-    @Expose
     private String codeSubstance;
     @ColumnInfo(name = "denomination_substance")
-    @SerializedName("denomination_substance")
-    @Expose
     private String denominationSubstance;
     @ColumnInfo(name = "dosage_substance")
-    @SerializedName("dosage_substance")
-    @Expose
     private String dosageSubstance;
     @ColumnInfo(name = "reference_dosage")
-    @SerializedName("reference_dosage")
-    @Expose
     private String referenceDosage;
     @ColumnInfo(name = "nature_composant")
-    @SerializedName("nature_composant")
-    @Expose
     private String natureComposant;
     @ColumnInfo(name = "numero_liaison")
-    @SerializedName("numero_liaison")
-    @Expose
     private int numeroLiaison;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialite_id_code_cis")
-    @Expose
     private long specialiteIdCodeCis;
 
     public Composition(String elementPharmaceutique, String codeSubstance, String denominationSubstance, String dosageSubstance, String referenceDosage, String natureComposant, int numeroLiaison, long specialiteIdCodeCis) {

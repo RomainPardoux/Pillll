@@ -6,9 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.pillll.pillll.database.converter.DateConverter;
 import java.util.Date;
 
@@ -26,31 +23,17 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Smr {
 
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private long id;
     @ColumnInfo(name = "motif_evaluation")
-    @SerializedName("motif_evaluation")
-    @Expose
     private String motifEvaluation;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_avis_ct")
-    @SerializedName("date_avis_ct")
-    @Expose
     private Date dateAvisCt;
-    @SerializedName("valeur")
-    @Expose
     private String valeur;
-    @SerializedName("libelle")
-    @Expose
     private String libelle;
     @ColumnInfo(name = "lien_ct_code_dossier_has")
-    @SerializedName("lien_ct_code_dossier_has")
-    @Expose
     private String lienCtCodeDossierHas;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialite_id_code_cis")
-    @Expose
     private long specialiteIdCodeCis;
 
     public Smr( String motifEvaluation, Date dateAvisCt, String valeur, String libelle, String lienCtCodeDossierHas, long specialiteIdCodeCis) {

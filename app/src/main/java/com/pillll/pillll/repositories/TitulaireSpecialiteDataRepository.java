@@ -9,7 +9,6 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.TitulaireSpecialiteDao;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
-import com.pillll.pillll.database.entity.TitulairesSpecialites;
 
 import java.util.List;
 import retrofit2.Call;

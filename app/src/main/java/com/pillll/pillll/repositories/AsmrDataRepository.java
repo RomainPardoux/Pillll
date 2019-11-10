@@ -9,7 +9,7 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.AsmrDao;
 import com.pillll.pillll.database.entity.Asmr;
-import com.pillll.pillll.database.entity.Asmrs;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

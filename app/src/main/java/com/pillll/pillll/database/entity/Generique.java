@@ -6,9 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -21,23 +18,13 @@ public class Generique {
 
     @PrimaryKey
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialite_id_code_cis")
-    @Expose
     private long specialiteIdCodeCis;
     @ColumnInfo(name = "identifiant_groupe")
-    @SerializedName("identifiant_groupe")
-    @Expose
     private String identifiantGroupe;
     @ColumnInfo(name = "libelle_groupe")
-    @SerializedName("libelle_groupe")
-    @Expose
     private String libelleGroupe;
-    @SerializedName("type")
-    @Expose
     private String type;
     @ColumnInfo(name = "numero_tri")
-    @SerializedName("numero_tri")
-    @Expose
     private String numeroTri;
 
     public Generique(long specialiteIdCodeCis, String identifiantGroupe, String libelleGroupe, String type, String numeroTri) {

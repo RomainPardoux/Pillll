@@ -9,7 +9,6 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.ConditionPrescriptionDao;
 import com.pillll.pillll.database.entity.ConditionPrescription;
-import com.pillll.pillll.database.entity.ConditionsPrescriptions;
 
 import java.util.List;
 import retrofit2.Call;

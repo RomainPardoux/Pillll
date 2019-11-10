@@ -9,7 +9,6 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.CompositionDao;
 import com.pillll.pillll.database.entity.Composition;
-import com.pillll.pillll.database.entity.Compositions;
 
 import java.util.List;
 import retrofit2.Call;

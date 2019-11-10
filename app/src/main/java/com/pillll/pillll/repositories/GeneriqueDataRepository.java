@@ -9,7 +9,6 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.GeneriqueDao;
 import com.pillll.pillll.database.entity.Generique;
-import com.pillll.pillll.database.entity.Generiques;
 
 import retrofit2.Call;
 import retrofit2.Callback;

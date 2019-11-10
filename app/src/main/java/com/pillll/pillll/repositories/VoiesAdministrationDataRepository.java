@@ -9,7 +9,7 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.VoiesAdministrationDao;
 import com.pillll.pillll.database.entity.VoiesAdministration;
-import com.pillll.pillll.database.entity.VoiesAdministrations;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

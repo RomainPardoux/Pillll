@@ -1,7 +1,8 @@
-package com.pillll.pillll.database.entity;
+package com.pillll.pillll.database.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.pillll.pillll.database.entity.Specialite;
 
 import java.util.List;
 
@@ -9,12 +10,12 @@ public class Specialites {
 
     @SerializedName("data")
     @Expose
-    private List<Specialite> specialites;
+    private List<com.pillll.pillll.database.entity.Specialite> specialites;
     @SerializedName("meta")
     @Expose
     private Meta meta;
 
-    public List<Specialite> getData() {
+    public List<com.pillll.pillll.database.entity.Specialite> getData() {
         return specialites;
     }
 

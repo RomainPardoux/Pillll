@@ -9,7 +9,7 @@ import com.pillll.pillll.database.PillllDatabase;
 import com.pillll.pillll.database.PillllWebService;
 import com.pillll.pillll.database.dao.SmrDao;
 import com.pillll.pillll.database.entity.Smr;
-import com.pillll.pillll.database.entity.Smrs;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

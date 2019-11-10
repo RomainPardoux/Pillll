@@ -5,10 +5,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -20,15 +16,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class TitulaireSpecialite {
 
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private long id;
-    @SerializedName("titulaire")
-    @Expose
     private String titulaire;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialite_id_code_cis")
-    @Expose
     private long specialiteIdCodeCis;
 
     public TitulaireSpecialite(String titulaire, long specialiteIdCodeCis) {

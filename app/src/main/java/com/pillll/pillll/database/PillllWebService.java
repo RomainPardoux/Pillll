@@ -1,28 +1,19 @@
 package com.pillll.pillll.database;
 
 import com.pillll.pillll.database.entity.Asmr;
-import com.pillll.pillll.database.entity.Asmrs;
 import com.pillll.pillll.database.entity.Composition;
-import com.pillll.pillll.database.entity.Compositions;
 import com.pillll.pillll.database.entity.ConditionPrescription;
-import com.pillll.pillll.database.entity.ConditionsPrescriptions;
 import com.pillll.pillll.database.entity.Generique;
-import com.pillll.pillll.database.entity.Generiques;
 import com.pillll.pillll.database.entity.InfoImportante;
-import com.pillll.pillll.database.entity.InfosImportantes;
 import com.pillll.pillll.database.entity.LienCt;
 import com.pillll.pillll.database.entity.Presentation;
-import com.pillll.pillll.database.entity.Presentations;
+import com.pillll.pillll.database.pojo.Presentations;
 import com.pillll.pillll.database.entity.Smr;
-import com.pillll.pillll.database.entity.Smrs;
 import com.pillll.pillll.database.entity.Specialite;
-import com.pillll.pillll.database.entity.Specialites;
+import com.pillll.pillll.database.pojo.Specialites;
 import com.pillll.pillll.database.entity.TitulaireSpecialite;
-import com.pillll.pillll.database.entity.TitulairesSpecialites;
 import com.pillll.pillll.database.entity.VoiesAdministration;
-import com.pillll.pillll.database.entity.VoiesAdministrations;
 
-import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

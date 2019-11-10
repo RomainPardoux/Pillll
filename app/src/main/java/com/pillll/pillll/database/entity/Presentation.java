@@ -6,9 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.pillll.pillll.database.converter.DateConverter;
 
 import java.util.Date;
@@ -24,59 +21,31 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Presentation {
 
     @PrimaryKey
-    @SerializedName("id")
-    @Expose
     private long id;
     @ColumnInfo(name = "code_cip7")
-    @SerializedName("code_cip7")
-    @Expose
     private String codeCip7;
     @ColumnInfo(name = "code_cip13")
-    @SerializedName("code_cip13")
-    @Expose
     private String codeCip13;
-    @SerializedName("libelle")
-    @Expose
     private String libelle;
     @ColumnInfo(name = "statut_administratif")
-    @SerializedName("statut_administratif")
-    @Expose
     private String statutAdministratif;
     @ColumnInfo(name = "etat_commercialisation")
-    @SerializedName("etat_commercialisation")
-    @Expose
     private String etatCommercialisation;
     @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "date_commercialisation")
-    @SerializedName("date_commercialisation")
-    @Expose
     private Date dateCommercialisation;
     @ColumnInfo(name = "agrement_collectivites")
-    @SerializedName("agrement_collectivites")
-    @Expose
     private boolean agrementCollectivites;
     @ColumnInfo(name = "taux_remboursement")
-    @SerializedName("taux_remboursement")
-    @Expose
     private int tauxRemboursement;
     @ColumnInfo(name = "prix_euros")
-    @SerializedName("prix_euros")
-    @Expose
     private double prixEuros;
     @ColumnInfo(name = "prix_euros_hors_honoraire")
-    @SerializedName("prix_euros_hors_honoraire")
-    @Expose
     private double prixEurosHorsHonoraire;
-    @SerializedName("honoraire")
-    @Expose
     private double honoraire;
     @ColumnInfo(name = "precision_remboursement")
-    @SerializedName("precision_remboursement")
-    @Expose
     private String precisionRemboursement;
     @ColumnInfo(name = "specialite_id_code_cis")
-    @SerializedName("specialite_id_code_cis")
-    @Expose
     private long specialiteIdCodeCis;
 
     public Presentation(long id, String codeCip7, String codeCip13, String libelle, String statutAdministratif, String etatCommercialisation, Date dateCommercialisation, boolean agrementCollectivites, int tauxRemboursement, double prixEuros, double prixEurosHorsHonoraire, double honoraire, String precisionRemboursement, long specialiteIdCodeCis) {
