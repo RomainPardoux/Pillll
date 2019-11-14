@@ -27,54 +27,12 @@ public class LienCtDataRepository {
         this.lienCtDao = db.lienCtDao();
     }
 
-    // ACTION SUR WEB SERVICE
-
-    /**
-     * Refresh LienCt data from pillll WebService by code dossier has
-     *
-     * @param codeDossierHas
-     */
-    public void refreshLienCt(String codeDossierHas) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<LienCt> call = pillllApi.getLienCt(codeDossierHas);
-
-        call.enqueue(new Callback<LienCt>() {
-            @Override
-            public void onResponse(Call<LienCt> call, Response<LienCt> response) {
-                if (response.isSuccessful()){
-                    persistLienCt(response.body());
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LienCt> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-    }
-
     /**
      * Persist LienCt data from Sqlite database in AsyncTask.
      *
      * @param lienCt
      */
-    private void persistLienCt(LienCt lienCt){
+    public void persistLienCt(LienCt lienCt){
 
         new AsyncTask<LienCt, Void, Boolean>() {
 
@@ -111,8 +69,6 @@ public class LienCtDataRepository {
 
         }.execute(lienCt);
     }
-
-    // ACTION SUR SQLITE DB
 
     /**
      * Get LienCt data from Sqlite database by code dossier has.

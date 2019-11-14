@@ -2,25 +2,25 @@ package com.pillll.pillll.database.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.pillll.pillll.database.entity.Specialite;
+import com.pillll.pillll.database.entity.Presentation;
 
 import java.util.List;
 
-public class Specialites {
+public class PresentationsData {
 
     @SerializedName("data")
     @Expose
-    private List<com.pillll.pillll.database.entity.Specialite> specialites;
+    private List<com.pillll.pillll.database.entity.Presentation> presentations;
     @SerializedName("meta")
     @Expose
     private Meta meta;
 
-    public List<com.pillll.pillll.database.entity.Specialite> getData() {
-        return specialites;
+    public List<com.pillll.pillll.database.entity.Presentation> getData() {
+        return presentations;
     }
 
-    public void setData(List<Specialite> data) {
-        this.specialites = data;
+    public void setData(List<Presentation> data) {
+        this.presentations = data;
     }
 
     public Meta getMeta() {

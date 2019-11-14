@@ -29,57 +29,12 @@ public class GeneriqueDataRepository {
         this.generiqueDao = db.generiqueDao();
     }
 
-    // ACTION SUR WEB SERVICE
-
     /**
-     * Refresh Generique data from pillll WebService by code cis
-     *
-     * @param idCodeCis
-     */
-    public void refreshGenerique(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Generiques> call = pillllApi.listGenerique(idCodeCis);
-
-        call.enqueue(new Callback<Generiques>() {
-            @Override
-            public void onResponse(Call<Generiques> call, Response<Generiques> response) {
-                if (response.isSuccessful()){
-                    for (Generique generique : response.body().getData() ) {
-                        persistGenerique(generique);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Generiques> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-
-    }
-
-    /**
-     * Persist Generique data from Sqlite database in AsyncTask.
+     * Persist Generique data in Sqlite database in AsyncTask.
      *
      * @param generique
      */
-    private void persistGenerique(Generique generique){
+    public void persistGenerique(Generique generique){
 
         new AsyncTask<Generique, Void, Boolean>() {
 
@@ -116,8 +71,6 @@ public class GeneriqueDataRepository {
 
         }.execute(generique);
     }
-
-    // ACTION SUR SQLITE DB
 
     /**
      * Get Generique data from Sqlite database by code cis.

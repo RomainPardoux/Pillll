@@ -30,54 +30,12 @@ public class VoiesAdministrationDataRepository {
         this.voiesAdministrationDao = db.voiesAdministrationDao();
     }
 
-    // ACTION SUR WEB SERVICE
-    /**
-     * Refresh VoiesAdministration list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshVoiesAdministrations(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<VoiesAdministrations> call = pillllApi.listVoiesAdministration(idCodeCis);
-
-        call.enqueue(new Callback<VoiesAdministrations>() {
-            @Override
-            public void onResponse(Call<VoiesAdministrations> call, Response<VoiesAdministrations> response) {
-                if (response.isSuccessful()){
-                    for (VoiesAdministration voiesAdministration : response.body().getData()) {
-                        persistVoiesAdministration(voiesAdministration);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VoiesAdministrations> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-    }
-
     /**
      * Persist VoiesAdministration data from Sqlite database in AsyncTask.
      *
      * @param voiesAdministration
      */
-    private void persistVoiesAdministration(VoiesAdministration voiesAdministration){
+    public void persistVoiesAdministration(VoiesAdministration voiesAdministration){
 
         new AsyncTask<VoiesAdministration, Void, Boolean>() {
 
@@ -115,7 +73,6 @@ public class VoiesAdministrationDataRepository {
         }.execute(voiesAdministration);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of VoiesAdministration from Sqlite database by voiesAdministration id.
      * @param id

@@ -38,6 +38,10 @@ public class InfoImportante {
         this.specialiteIdCodeCis = specialiteIdCodeCis;
     }
 
+
+    public InfoImportante() {
+    }
+
     // GETTER AND SETTER
     public long getId() {
         return id;

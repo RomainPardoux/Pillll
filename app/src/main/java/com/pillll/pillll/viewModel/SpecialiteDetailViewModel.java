@@ -24,6 +24,7 @@ import com.pillll.pillll.repositories.ConditionPrescriptionDataRepository;
 import com.pillll.pillll.repositories.GeneriqueDataRepository;
 import com.pillll.pillll.repositories.InfoImportanteDataRepository;
 import com.pillll.pillll.repositories.LienCtDataRepository;
+import com.pillll.pillll.repositories.NetworkDataRepository;
 import com.pillll.pillll.repositories.PresentationDataRepository;
 import com.pillll.pillll.repositories.SmrDataRepository;
 import com.pillll.pillll.repositories.SpecialiteDataRepository;
@@ -50,6 +51,7 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
     private LienCtDataRepository lienCtDataSource;
     private TitulaireSpecialiteDataRepository titulaireSpecialiteDataSource;
     private VoiesAdministrationDataRepository voiesAdministrationDataSource;
+    private NetworkDataRepository networkDataSource;
 
     @Nullable
     private LiveData<Generique> currentGenerique;
@@ -91,48 +93,8 @@ public class SpecialiteDetailViewModel extends AndroidViewModel {
     }
 
     // REFRESH PUBLIC
-    public void refreshPresentation(String codeCip){
-        this.presentationDataSource.refreshPresentation(codeCip);
-    }
-
-    public void refreshSpecialite(long idCodeCis){
-        this.specialiteDataSource.refreshSpecialite(idCodeCis);
-    }
-
-    public void refreshAsmrs(long idCodeCis){
-        this.asmrDataSource.refreshAsmrs(idCodeCis);
-    }
-
-    public void refreshSmrs(long idCodeCis){
-        this.smrDataSource.refreshSmrs(idCodeCis);
-    }
-
-    public void refreshGeneriques(long idCodeCis){
-        this.generiqueDataSource.refreshGenerique(idCodeCis);
-    }
-
-    public void refreshInfosImportantes(long idCodeCis){
-        this.infoImportanteDataSource.refreshInfoImportantes(idCodeCis);
-    }
-
-    public void refreshConditionsPrescriptions(long idCodeCis){
-        this.conditionPrescriptionDataSource.refreshConditionPrescriptions(idCodeCis);
-    }
-
-    public void refreshVoiesAdministrations(long idCodeCis){
-        this.voiesAdministrationDataSource.refreshVoiesAdministrations(idCodeCis);
-    }
-
-    public void refreshTitulairesSpecialites(long idCodeCis){
-        this.titulaireSpecialiteDataSource.refreshTitulaireSpecialites(idCodeCis);
-    }
-
-    public void refreshLiensCts(String CodeDossierHas){
-        this.lienCtDataSource.refreshLienCt(CodeDossierHas);
-    }
-
-    public void refreshCompositions(long idCodeCis){
-        this.compositionDataSource.refreshCompositions(idCodeCis);
+    public void refreshData(String codeCip){
+        this.networkDataSource.refreshData(codeCip);
     }
 
     // GET DATA FROM SQLITE DB PUBLIC

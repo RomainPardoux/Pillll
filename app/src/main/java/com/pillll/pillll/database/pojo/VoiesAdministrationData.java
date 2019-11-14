@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName;
  * Created by Pardoux Romain on 09/11/2019
  */
 
-public class ConditionPrescription {
+public class VoiesAdministrationData {
 
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("condition_prescription")
+    @SerializedName("voies_administration")
     @Expose
-    private String conditionPrescription;
+    private String voiesAdministration;
 
     // GETTER AND SETTER
 
@@ -26,11 +26,11 @@ public class ConditionPrescription {
         this.id = id;
     }
 
-    public String getConditionPrescription() {
-        return conditionPrescription;
+    public String getVoiesAdministration() {
+        return voiesAdministration;
     }
 
-    public void setConditionPrescription(String conditionPrescription) {
-        this.conditionPrescription = conditionPrescription;
+    public void setVoiesAdministration(String voiesAdministration) {
+        this.voiesAdministration = voiesAdministration;
     }
 }

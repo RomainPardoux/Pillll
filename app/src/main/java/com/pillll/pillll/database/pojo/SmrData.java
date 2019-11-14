@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Pardoux Romain on 09/11/2019
  */
 
-public class Asmr {
+public class SmrData {
 
     @SerializedName("id")
     @Expose
@@ -26,10 +26,10 @@ public class Asmr {
     private String libelle;
     @SerializedName("lien_ct")
     @Expose
-    private LienCt lienCt;
+    private LienCtData lienCt;
+
 
     // GETTER AND SETTER
-
     public long getId() {
         return id;
     }
@@ -70,11 +70,12 @@ public class Asmr {
         this.libelle = libelle;
     }
 
-    public LienCt getLienCt() {
+    public LienCtData getLienCt() {
         return lienCt;
     }
 
-    public void setLienCt(LienCt lienCt) {
-        this.lienCt = lienCt;
+    public void setLienCt(LienCtData lienCt) {
+        this.lienCt= lienCt;
     }
+
 }

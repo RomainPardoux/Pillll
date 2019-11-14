@@ -31,52 +31,11 @@ public class AsmrDataRepository {
 
     // ACTION SUR WEB SERVICE
     /**
-     * Refresh Asmr list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshAsmrs(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Asmrs> call = pillllApi.listAsmr(idCodeCis);
-
-        call.enqueue(new Callback<Asmrs>() {
-            @Override
-            public void onResponse(Call<Asmrs> call, Response<Asmrs> response) {
-                if (response.isSuccessful()){
-                    for (Asmr asmr : response.body().getData()) {
-                        persistAsmr(asmr);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Asmrs> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-    }
-
-    /**
-     * Persist Asmr data from Sqlite database in AsyncTask.
+     * Persist Asmr data in Sqlite database in AsyncTask.
      *
      * @param asmr
      */
-    private void persistAsmr(Asmr asmr){
+    public void persistAsmr(Asmr asmr){
 
         new AsyncTask<Asmr, Void, Boolean>() {
 
@@ -114,7 +73,6 @@ public class AsmrDataRepository {
         }.execute(asmr);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of Asmr from Sqlite database by asmr id.
      * @param id

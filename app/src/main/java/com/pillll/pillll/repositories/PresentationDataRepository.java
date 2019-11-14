@@ -29,66 +29,12 @@ public class PresentationDataRepository {
         this.presentationDao = db.presentationDao();
     }
 
-    // ACTION SUR WEB SERVICE
-
-    /**
-     * Refresh Presentation data from pillll WebService by code cip
-     *
-     * @param codeCip
-     */
-    public void refreshPresentation(String codeCip) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Presentation> call;
-
-        switch (codeCip.length()){
-            case 7:
-                call = pillllApi.getPresentationWithCodeCip7(codeCip);
-                break;
-            case 13:
-                call = pillllApi.getPresentationWithCodeCip13(codeCip);
-                break;
-            default:
-                call = null;
-        }
-
-        call.enqueue(new Callback<Presentation>() {
-            @Override
-            public void onResponse(Call<Presentation> call, Response<Presentation> response) {
-                if (response.isSuccessful()){
-                    persistPresentation(response.body());
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Presentation> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-
-    }
-
     /**
      * Persist Presentation data from Sqlite database in AsyncTask.
      *
      * @param presentation
      */
-    private void persistPresentation(Presentation presentation){
+    public void persistPresentation(Presentation presentation){
 
         new AsyncTask<Presentation, Void, Boolean>() {
 
@@ -125,8 +71,6 @@ public class PresentationDataRepository {
 
         }.execute(presentation);
     }
-
-    // ACTION SUR SQLITE DB
 
     /**
      * Get Presentation data from Sqlite database by presentation id.

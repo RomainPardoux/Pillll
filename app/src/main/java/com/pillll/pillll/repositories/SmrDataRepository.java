@@ -29,55 +29,12 @@ public class SmrDataRepository {
         this.smrDao = db.smrDao();
     }
 
-    // ACTION SUR WEB SERVICE
-    /**
-     * Refresh Smr list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshSmrs(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Smrs> call = pillllApi.listSmr(idCodeCis);
-
-        call.enqueue(new Callback<Smrs>() {
-            @Override
-            public void onResponse(Call<Smrs> call, Response<Smrs> response) {
-                if (response.isSuccessful()){
-                    for (Smr smr : response.body().getData()) {
-                        persistSmr(smr);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Smrs> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-
-    }
-
     /**
      * Persist Smr data from Sqlite database in AsyncTask.
      *
      * @param smr
      */
-    private void persistSmr(Smr smr){
+    public void persistSmr(Smr smr){
 
         new AsyncTask<Smr, Void, Boolean>() {
 
@@ -115,7 +72,6 @@ public class SmrDataRepository {
         }.execute(smr);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of Smr from Sqlite database by smr id.
      * @param id

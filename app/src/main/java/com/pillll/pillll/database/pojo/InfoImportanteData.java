@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Pardoux Romain on 09/11/2019
  */
-public class InfoImportante {
+public class InfoImportanteData {
 
     @SerializedName("id")
     @Expose

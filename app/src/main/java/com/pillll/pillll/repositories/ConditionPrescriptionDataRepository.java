@@ -29,54 +29,12 @@ public class ConditionPrescriptionDataRepository {
         this.conditionPrescriptionDao = db.conditionPrescriptionDao();
     }
 
-    // ACTION SUR WEB SERVICE
     /**
-     * Refresh ConditionPrescription list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshConditionPrescriptions(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<ConditionsPrescriptions> call = pillllApi.listConditionPrescription(idCodeCis);
-
-        call.enqueue(new Callback<ConditionsPrescriptions>() {
-            @Override
-            public void onResponse(Call<ConditionsPrescriptions> call, Response<ConditionsPrescriptions> response) {
-                if (response.isSuccessful()){
-                    for (ConditionPrescription conditionPrescription : response.body().getData()) {
-                        persistConditionPrescription(conditionPrescription);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ConditionsPrescriptions> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-    }
-
-    /**
-     * Persist ConditionPrescription data from Sqlite database in AsyncTask.
+     * Persist ConditionPrescription data in Sqlite database in AsyncTask.
      *
      * @param conditionPrescription
      */
-    private void persistConditionPrescription(ConditionPrescription conditionPrescription){
+    public void persistConditionPrescription(ConditionPrescription conditionPrescription){
 
         new AsyncTask<ConditionPrescription, Void, Boolean>() {
 
@@ -114,7 +72,6 @@ public class ConditionPrescriptionDataRepository {
         }.execute(conditionPrescription);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of ConditionPrescription from Sqlite database by conditionPrescription id.
      * @param id

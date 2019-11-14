@@ -30,54 +30,12 @@ public class InfoImportanteDataRepository {
         this.infoImportanteDao = db.infoImportanteDao();
     }
 
-    // ACTION SUR WEB SERVICE
     /**
-     * Refresh InfoImportante list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshInfoImportantes(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<InfosImportantes> call = pillllApi.listInfoImportante(idCodeCis);
-
-        call.enqueue(new Callback<InfosImportantes>() {
-            @Override
-            public void onResponse(Call<InfosImportantes> call, Response<InfosImportantes> response) {
-                if (response.isSuccessful()){
-                    for (InfoImportante infoImportante : response.body().getData()) {
-                        persistInfoImportante(infoImportante);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<InfosImportantes> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-    }
-
-    /**
-     * Persist InfoImportante data from Sqlite database in AsyncTask.
+     * Persist InfoImportante data in Sqlite database in AsyncTask.
      *
      * @param infoImportante
      */
-    private void persistInfoImportante(InfoImportante infoImportante){
+    public void persistInfoImportante(InfoImportante infoImportante){
 
         new AsyncTask<InfoImportante, Void, Boolean>() {
 
@@ -115,7 +73,6 @@ public class InfoImportanteDataRepository {
         }.execute(infoImportante);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of InfoImportante from Sqlite database by infoImportante id.
      * @param id

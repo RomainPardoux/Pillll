@@ -6,14 +6,15 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Pardoux Romain on 09/11/2019
  */
-public class TitulaireSpecialite {
+
+public class ConditionPrescriptionData {
 
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("titulaire")
+    @SerializedName("condition_prescription")
     @Expose
-    private String titulaire;
+    private String conditionPrescription;
 
     // GETTER AND SETTER
 
@@ -25,11 +26,11 @@ public class TitulaireSpecialite {
         this.id = id;
     }
 
-    public String getTitulaire() {
-        return titulaire;
+    public String getConditionPrescription() {
+        return conditionPrescription;
     }
 
-    public void setTitulaire(String titulaire) {
-        this.titulaire = titulaire;
+    public void setConditionPrescription(String conditionPrescription) {
+        this.conditionPrescription = conditionPrescription;
     }
 }

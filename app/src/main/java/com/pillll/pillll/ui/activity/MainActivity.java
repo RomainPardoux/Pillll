@@ -253,14 +253,13 @@ public class MainActivity extends AppCompatActivity {
 
         //On recupere le code cip 7 ou 13 du textView
         String idCodeCip = editText.getText().toString();
-        specialiteDetailViewModel.refreshPresentation(idCodeCip);
+        specialiteDetailViewModel.refreshData(idCodeCip);
         specialiteDetailViewModel.getPresentation(idCodeCip).observeForever(new Observer<Presentation>() {
             @Override
             public void onChanged(@Nullable Presentation presentation) {
                 if (presentation != null){
                     textViewPresentation.setText(presentation.getLibelle());
                     long idCodeCis = presentation.getSpecialiteIdCodeCis();
-                    specialiteDetailViewModel.refreshSpecialite(idCodeCis);
                     specialiteDetailViewModel.getSpecialite(idCodeCis).observeForever(new Observer<Specialite>() {
                         @Override
                         public void onChanged(@Nullable Specialite specialite) {
@@ -271,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    specialiteDetailViewModel.refreshCompositions(idCodeCis);
                     specialiteDetailViewModel.getCompositions(idCodeCis).observeForever(new Observer<List<Composition>>() {
                         @Override
                         public void onChanged(@Nullable List<Composition> compositions) {
@@ -288,7 +286,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshAsmrs(idCodeCis);
                     specialiteDetailViewModel.getAsmrs(idCodeCis).observeForever(new Observer<List<Asmr>>() {
                         @Override
                         public void onChanged(@Nullable List<Asmr> asmrs) {
@@ -297,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
                                 for (Asmr asmr: asmrs) {
                                     asmrValeur += asmr.getValeur();
                                     asmrValeur += ". ";
-                                    specialiteDetailViewModel.refreshLiensCts(asmr.getLienCtCodeDossierHas());
                                     specialiteDetailViewModel.getLiensCts(asmr.getLienCtCodeDossierHas()).observeForever(new Observer<LienCt>() {
                                         @Override
                                         public void onChanged(@Nullable LienCt lienCt) {
@@ -322,7 +318,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshSmrs(idCodeCis);
                     specialiteDetailViewModel.getSmrs(idCodeCis).observeForever(new Observer<List<Smr>>() {
                         @Override
                         public void onChanged(@Nullable List<Smr> smrs) {
@@ -339,7 +334,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshInfosImportantes(idCodeCis);
                     specialiteDetailViewModel.getInfosImportantes(idCodeCis).observeForever(new Observer<List<InfoImportante>>() {
                         @Override
                         public void onChanged(@Nullable List<InfoImportante> infoImportantes) {
@@ -357,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshVoiesAdministrations(idCodeCis);
                     specialiteDetailViewModel.getVoiesAdministrations(idCodeCis).observeForever(new Observer<List<VoiesAdministration>>() {
                         @Override
                         public void onChanged(@Nullable List<VoiesAdministration> voiesAdministrations) {
@@ -374,7 +367,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshConditionsPrescriptions(idCodeCis);
                     specialiteDetailViewModel.getConditionsPrescriptions(idCodeCis).observeForever(new Observer<List<ConditionPrescription>>() {
                         @Override
                         public void onChanged(@Nullable List<ConditionPrescription> conditionPrescriptions) {
@@ -391,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshTitulairesSpecialites(idCodeCis);
                     specialiteDetailViewModel.getTitulairesSpecialites(idCodeCis).observeForever(new Observer<List<TitulaireSpecialite>>() {
                         @Override
                         public void onChanged(@Nullable List<TitulaireSpecialite> titulaireSpecialites) {
@@ -408,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.refreshGeneriques(idCodeCis);
                     specialiteDetailViewModel.getGeneriques(idCodeCis).observeForever(new Observer<Generique>() {
                         @Override
                         public void onChanged(@Nullable Generique generique) {

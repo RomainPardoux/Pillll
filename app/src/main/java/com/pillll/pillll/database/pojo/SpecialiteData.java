@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Pardoux Romain on 09/11/2019
  */
 
-public class Specialite {
+public class SpecialiteData {
 
     @SerializedName("id")
     @Expose
@@ -44,28 +44,28 @@ public class Specialite {
 
     @SerializedName("compositions")
     @Expose
-    private List<Composition> compositions;
+    private List<CompositionData> compositions;
     @SerializedName("asmrs")
     @Expose
-    private List<Asmr> asmrs;
+    private List<AsmrData> asmrs;
     @SerializedName("smrs")
     @Expose
-    private List<Smr> smrs;
+    private List<SmrData> smrs;
     @SerializedName("condition_prescriptions")
     @Expose
-    private List<ConditionPrescription> conditionPrescriptions;
+    private List<ConditionPrescriptionData> conditionPrescriptions;
     @SerializedName("info_importantes")
     @Expose
-    private List<InfoImportante> infoImportantes;
+    private List<InfoImportanteData> infoImportantes;
     @SerializedName("titulaire_specialites")
     @Expose
-    private List<TitulaireSpecialite> titulaireSpecialites;
+    private List<TitulaireSpecialiteData> titulaireSpecialites;
     @SerializedName("voies_administrations")
     @Expose
-    private List<VoiesAdministration> voiesAdministrations;
+    private List<VoiesAdministrationData> voiesAdministrations;
     @SerializedName("generique")
     @Expose
-    private Generique generique;
+    private GeneriqueData generique;
 
     // GETTER AND SETTER
 
@@ -149,67 +149,67 @@ public class Specialite {
         this.etatCommercialisation = etatCommercialisation;
     }
 
-    public List<Composition> getCompositions() {
+    public List<CompositionData> getCompositions() {
         return compositions;
     }
 
-    public void setCompositions(List<Composition> compositions) {
+    public void setCompositions(List<CompositionData> compositions) {
         this.compositions = compositions;
     }
 
-    public List<Asmr> getAsmrs() {
+    public List<AsmrData> getAsmrs() {
         return asmrs;
     }
 
-    public void setAsmrs(List<Asmr> asmrs) {
+    public void setAsmrs(List<AsmrData> asmrs) {
         this.asmrs = asmrs;
     }
 
-    public List<Smr> getSmrs() {
+    public List<SmrData> getSmrs() {
         return smrs;
     }
 
-    public void setSmrs(List<Smr> smrs) {
+    public void setSmrs(List<SmrData> smrs) {
         this.smrs = smrs;
     }
 
-    public List<ConditionPrescription> getConditionPrescriptions() {
+    public List<ConditionPrescriptionData> getConditionPrescriptions() {
         return conditionPrescriptions;
     }
 
-    public void setConditionPrescriptions(List<ConditionPrescription> conditionPrescriptions) {
+    public void setConditionPrescriptions(List<ConditionPrescriptionData> conditionPrescriptions) {
         this.conditionPrescriptions = conditionPrescriptions;
     }
 
-    public List<InfoImportante> getInfoImportantes() {
+    public List<InfoImportanteData> getInfoImportantes() {
         return infoImportantes;
     }
 
-    public void setInfoImportantes(List<InfoImportante> infoImportantes) {
+    public void setInfoImportantes(List<InfoImportanteData> infoImportantes) {
         this.infoImportantes = infoImportantes;
     }
 
-    public List<TitulaireSpecialite> getTitulaireSpecialites() {
+    public List<TitulaireSpecialiteData> getTitulaireSpecialites() {
         return titulaireSpecialites;
     }
 
-    public void setTitulaireSpecialites(List<TitulaireSpecialite> titulaireSpecialites) {
+    public void setTitulaireSpecialites(List<TitulaireSpecialiteData> titulaireSpecialites) {
         this.titulaireSpecialites = titulaireSpecialites;
     }
 
-    public List<VoiesAdministration> getVoiesAdministrations() {
+    public List<VoiesAdministrationData> getVoiesAdministrations() {
         return voiesAdministrations;
     }
 
-    public void setVoiesAdministrations(List<VoiesAdministration> voiesAdministrations) {
+    public void setVoiesAdministrations(List<VoiesAdministrationData> voiesAdministrations) {
         this.voiesAdministrations = voiesAdministrations;
     }
 
-    public Generique getGenerique() {
+    public GeneriqueData getGenerique() {
         return generique;
     }
 
-    public void setGenerique(Generique generique) {
+    public void setGenerique(GeneriqueData generique) {
         this.generique = generique;
     }
 }

@@ -30,55 +30,12 @@ public class TitulaireSpecialiteDataRepository {
         this.titulaireSpecialiteDao = db.titulaireSpecialiteDao();
     }
 
-    // ACTION SUR WEB SERVICE
     /**
-     * Refresh TitulaireSpecialite list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshTitulaireSpecialites(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<TitulairesSpecialites> call = pillllApi.listTitulaireSpecialite(idCodeCis);
-
-        call.enqueue(new Callback<TitulairesSpecialites>() {
-            @Override
-            public void onResponse(Call<TitulairesSpecialites> call, Response<TitulairesSpecialites> response) {
-                if (response.isSuccessful()){
-                    for (TitulaireSpecialite titulaireSpecialite : response.body().getData()) {
-                        persistTitulaireSpecialite(titulaireSpecialite);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TitulairesSpecialites> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-
-    }
-
-    /**
-     * Persist TitulaireSpecialite data from Sqlite database in AsyncTask.
+     * Persist TitulaireSpecialite data in Sqlite database in AsyncTask.
      *
      * @param titulaireSpecialite
      */
-    private void persistTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite){
+    public void persistTitulaireSpecialite(TitulaireSpecialite titulaireSpecialite){
 
         new AsyncTask<TitulaireSpecialite, Void, Boolean>() {
 
@@ -116,7 +73,6 @@ public class TitulaireSpecialiteDataRepository {
         }.execute(titulaireSpecialite);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of TitulaireSpecialite from Sqlite database by titulaireSpecialite id.
      *

@@ -30,55 +30,12 @@ public class CompositionDataRepository {
         this.compositionDao = db.compositionDao();
     }
 
-    // ACTION SUR WEB SERVICE
     /**
-     * Refresh Composition list from pillll WebService by code cis
-     * @param idCodeCis
-     */
-    public void refreshCompositions(Long idCodeCis) {
-
-        // Get instance of pillllApi
-        PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
-        Call<Compositions> call = pillllApi.listComposition(idCodeCis);
-
-        call.enqueue(new Callback<Compositions>() {
-            @Override
-            public void onResponse(Call<Compositions> call, Response<Compositions> response) {
-                if (response.isSuccessful()){
-                    for (Composition composition : response.body().getData()) {
-                        persistComposition(composition);
-                    }
-                }else {
-                    //error case
-                    switch (response.code()){
-                        case 404:
-                            Log.d("error", "not found");
-                            break;
-                        case 500:
-                            Log.d("error", "not logged in or server broken");
-                            break;
-                        default:
-                            Log.d("error","unknown error");
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Compositions> call, Throwable t) {
-                // action à effectuer en cas d'echec
-                Log.d("error","failure");
-            }
-        });
-
-    }
-
-    /**
-     * Persist Composition data from Sqlite database in AsyncTask.
+     * Persist Composition data in Sqlite database in AsyncTask.
      *
      * @param composition
      */
-    private void persistComposition(Composition composition){
+    public void persistComposition(Composition composition){
 
         new AsyncTask<Composition, Void, Boolean>() {
 
@@ -116,7 +73,6 @@ public class CompositionDataRepository {
         }.execute(composition);
     }
 
-    // ACTION SUR SQLITE DB
     /**
      * Get a list of Composition from Sqlite database by composition id.
      * @param id

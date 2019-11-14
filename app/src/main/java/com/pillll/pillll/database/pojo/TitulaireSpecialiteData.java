@@ -6,15 +6,14 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Pardoux Romain on 09/11/2019
  */
-
-public class VoiesAdministration {
+public class TitulaireSpecialiteData {
 
     @SerializedName("id")
     @Expose
     private long id;
-    @SerializedName("voies_administration")
+    @SerializedName("titulaire")
     @Expose
-    private String voiesAdministration;
+    private String titulaire;
 
     // GETTER AND SETTER
 
@@ -26,11 +25,11 @@ public class VoiesAdministration {
         this.id = id;
     }
 
-    public String getVoiesAdministration() {
-        return voiesAdministration;
+    public String getTitulaire() {
+        return titulaire;
     }
 
-    public void setVoiesAdministration(String voiesAdministration) {
-        this.voiesAdministration = voiesAdministration;
+    public void setTitulaire(String titulaire) {
+        this.titulaire = titulaire;
     }
 }

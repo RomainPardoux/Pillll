@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Pardoux Romain on 09/11/2019
  */
 
-public class Presentation {
+public class PresentationData {
 
     @SerializedName("id")
     @Expose
@@ -50,7 +50,7 @@ public class Presentation {
     private String precisionRemboursement;
     @SerializedName("specialite")
     @Expose
-    private Specialite specialite;
+    private SpecialiteData specialite;
 
     //    GETTER AND SETTER
 
@@ -158,11 +158,11 @@ public class Presentation {
         this.precisionRemboursement = precisionRemboursement;
     }
 
-    public Specialite getSpecialite() {
+    public SpecialiteData getSpecialite() {
         return specialite;
     }
 
-    public void setSpecialite(Specialite specialite) {
+    public void setSpecialite(SpecialiteData specialite) {
         this.specialite = specialite;
     }
 }

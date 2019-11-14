@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Pardoux Romain on 09/11/2019
  */
 
-public class Generique {
+public class GeneriqueData {
 
     @SerializedName("id")
     @Expose
