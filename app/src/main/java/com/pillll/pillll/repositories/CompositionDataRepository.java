@@ -3,17 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.CompositionDao;
-import com.pillll.pillll.database.entity.Composition;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.CompositionDao;
+import com.pillll.pillll.model.entities.Composition;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to Composition data sources.
@@ -31,7 +24,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Persist Composition data in Sqlite database in AsyncTask.
+     * Persist Composition data in Sqlite model in AsyncTask.
      *
      * @param composition
      */
@@ -74,7 +67,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Get a list of Composition from Sqlite database by composition id.
+     * Get a list of Composition from Sqlite model by composition id.
      * @param id
      * @return list of composition
      */
@@ -83,7 +76,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Get a list of Composition from Sqlite database by code cis.
+     * Get a list of Composition from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of composition
      */
@@ -92,7 +85,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Insert Composition into Sqlite database.
+     * Insert Composition into Sqlite model.
      * @param composition
      * @return
      */
@@ -101,7 +94,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Update Composition from Sqlite database
+     * Update Composition from Sqlite model
      * @param composition
      * @return
      */
@@ -110,7 +103,7 @@ public class CompositionDataRepository {
     }
 
     /**
-     * Delete Composition from Sqlite database
+     * Delete Composition from Sqlite model
      * @param composition
      * @return
      */

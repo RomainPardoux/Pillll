@@ -3,20 +3,14 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.ConditionPrescriptionDao;
-import com.pillll.pillll.database.entity.ConditionPrescription;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.ConditionPrescriptionDao;
+import com.pillll.pillll.model.entities.ConditionPrescription;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to ConditionPrescription data sources.
+ *
  * @author Romain Pardoux
  * @version 1.0
  */
@@ -30,7 +24,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Persist ConditionPrescription data in Sqlite database in AsyncTask.
+     * Persist ConditionPrescription data in Sqlite model in AsyncTask.
      *
      * @param conditionPrescription
      */
@@ -73,7 +67,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Get a list of ConditionPrescription from Sqlite database by conditionPrescription id.
+     * Get a list of ConditionPrescription from Sqlite model by conditionPrescription id.
      * @param id
      * @return list of conditionPrescription
      */
@@ -82,7 +76,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Get a list of ConditionPrescription from Sqlite database by code cis.
+     * Get a list of ConditionPrescription from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of conditionPrescription
      */
@@ -91,7 +85,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Insert ConditionPrescription into Sqlite database.
+     * Insert ConditionPrescription into Sqlite model.
      * @param conditionPrescription
      * @return
      */
@@ -100,7 +94,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Update ConditionPrescription from Sqlite database
+     * Update ConditionPrescription from Sqlite model
      * @param conditionPrescription
      * @return
      */
@@ -109,7 +103,7 @@ public class ConditionPrescriptionDataRepository {
     }
 
     /**
-     * Delete ConditionPrescription from Sqlite database
+     * Delete ConditionPrescription from Sqlite model
      * @param conditionPrescription
      * @return
      */

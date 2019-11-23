@@ -1,30 +1,22 @@
 package com.pillll.pillll.repositories;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.pillll.pillll.database.CopyDataToEntity;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.entity.Asmr;
-import com.pillll.pillll.database.entity.Composition;
-import com.pillll.pillll.database.entity.ConditionPrescription;
-import com.pillll.pillll.database.entity.Generique;
-import com.pillll.pillll.database.entity.InfoImportante;
-import com.pillll.pillll.database.entity.LienCt;
-import com.pillll.pillll.database.entity.Presentation;
-import com.pillll.pillll.database.entity.Smr;
-import com.pillll.pillll.database.entity.TitulaireSpecialite;
-import com.pillll.pillll.database.entity.VoiesAdministration;
-import com.pillll.pillll.database.pojo.PresentationData;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import com.pillll.pillll.remoteDataSource.CopyDataToEntity;
+import com.pillll.pillll.remoteDataSource.NetworkService;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.remoteDataSource.PillllWebService;
+import com.pillll.pillll.model.entities.Asmr;
+import com.pillll.pillll.model.entities.Composition;
+import com.pillll.pillll.model.entities.ConditionPrescription;
+import com.pillll.pillll.model.entities.InfoImportante;
+import com.pillll.pillll.model.entities.LienCt;
+import com.pillll.pillll.model.entities.Presentation;
+import com.pillll.pillll.model.entities.Smr;
+import com.pillll.pillll.model.entities.TitulaireSpecialite;
+import com.pillll.pillll.model.entities.VoiesAdministration;
+import com.pillll.pillll.remoteDataSource.retrofitModel.PresentationData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,7 +42,6 @@ public class NetworkDataRepository {
     private ConditionPrescriptionDataRepository conditionPrescriptionDataRepository;
 
     public NetworkDataRepository(Application application) {
-        PillllDatabase db = PillllDatabase.getInstance(application);
         presentationDataRepository = new PresentationDataRepository(application);
         specialiteDataRepository = new SpecialiteDataRepository(application);
         asmrDataRepository = new AsmrDataRepository(application);
@@ -73,7 +64,6 @@ public class NetworkDataRepository {
      */
     public void refreshData(String codeCip) {
 
-        // Get instance of pillllApi
         PillllWebService pillllApi = NetworkService.getInstance().getPillllApi();
         Call<PresentationData> call;
 
@@ -85,7 +75,7 @@ public class NetworkDataRepository {
                 call = pillllApi.getPresentationWithCodeCip13(codeCip);
                 break;
             default:
-                call = null;
+                return;
         }
 
         call.enqueue(new Callback<PresentationData>() {
@@ -117,8 +107,7 @@ public class NetworkDataRepository {
                 Log.d("error","failure");
             }
 
-            public void persistDataToRoomDb(CopyDataToEntity copyDataToEntity){
-                //Persist Data
+            private void persistDataToRoomDb(CopyDataToEntity copyDataToEntity){
                 presentationDataRepository.persistPresentation(copyDataToEntity.getPresentation());
                 specialiteDataRepository.persistSpecialite(copyDataToEntity.getSpecialite());
                 generiqueDataRepository.persistGenerique(copyDataToEntity.getGenerique());
@@ -150,37 +139,4 @@ public class NetworkDataRepository {
             }
         });
     }
-
-    private Presentation copyPresentationDataToEntity(Response<PresentationData> response) {
-        //copy presentation data
-        copyPresentationDataToEntity(response);
-        Presentation presentation = new Presentation();
-        PresentationData presentationData = response.body();
-        presentation.setLibelle(presentationData.getLibelle());
-        presentation.setAgrementCollectivites(presentationData.isAgrementCollectivites());
-        presentation.setCodeCip7(presentationData.getCodeCip7());
-        presentation.setCodeCip13(presentationData.getCodeCip13());
-        //Gestion de la date !!
-        String dateCommercialisationString = presentationData.getDateCommercialisation();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            Date dateCommercialisation = simpleDateFormat.parse(dateCommercialisationString);
-            presentation.setDateCommercialisation(dateCommercialisation);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        presentation.setEtatCommercialisation(presentationData.getEtatCommercialisation());
-        presentation.setHonoraire(presentationData.getHonoraire());
-        presentation.setPrecisionRemboursement(presentationData.getPrecisionRemboursement());
-        presentation.setId(presentationData.getId());
-        presentation.setPrixEuros(presentationData.getPrixEuros());
-        presentation.setPrixEurosHorsHonoraire(presentationData.getPrixEurosHorsHonoraire());
-        presentation.setSpecialiteIdCodeCis(presentationData.getSpecialite().getIdCodeCis());
-        presentation.setStatutAdministratif(presentationData.getStatutAdministratif());
-        presentation.setTauxRemboursement(presentationData.getTauxRemboursement());
-        return presentation;
-    }
-
-
-
 }

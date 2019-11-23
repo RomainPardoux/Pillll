@@ -3,17 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.TitulaireSpecialiteDao;
-import com.pillll.pillll.database.entity.TitulaireSpecialite;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.TitulaireSpecialiteDao;
+import com.pillll.pillll.model.entities.TitulaireSpecialite;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to TitulaireSpecialite data sources.
@@ -31,7 +24,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Persist TitulaireSpecialite data in Sqlite database in AsyncTask.
+     * Persist TitulaireSpecialite data in Sqlite model in AsyncTask.
      *
      * @param titulaireSpecialite
      */
@@ -74,7 +67,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Get a list of TitulaireSpecialite from Sqlite database by titulaireSpecialite id.
+     * Get a list of TitulaireSpecialite from Sqlite model by titulaireSpecialite id.
      *
      * @param id
      * @return list of titulaireSpecialite
@@ -84,7 +77,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Get a list of TitulaireSpecialite from Sqlite database by code cis.
+     * Get a list of TitulaireSpecialite from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of titulaireSpecialite
      */
@@ -93,7 +86,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Insert TitulaireSpecialite into Sqlite database.
+     * Insert TitulaireSpecialite into Sqlite model.
      * @param titulaireSpecialite
      * @return
      */
@@ -102,7 +95,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Update TitulaireSpecialite from Sqlite database
+     * Update TitulaireSpecialite from Sqlite model
      * @param titulaireSpecialite
      * @return
      */
@@ -111,7 +104,7 @@ public class TitulaireSpecialiteDataRepository {
     }
 
     /**
-     * Delete TitulaireSpecialite from Sqlite database
+     * Delete TitulaireSpecialite from Sqlite model
      * @param titulaireSpecialite
      * @return
      */

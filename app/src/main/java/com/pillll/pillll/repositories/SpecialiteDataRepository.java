@@ -3,9 +3,9 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.dao.SpecialiteDao;
-import com.pillll.pillll.database.entity.Specialite;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.SpecialiteDao;
+import com.pillll.pillll.model.entities.Specialite;
 
 /**
  * Repository class that abstract access to Specialite data sources.
@@ -23,7 +23,7 @@ public class SpecialiteDataRepository {
     }
 
     /**
-     * Persist Specialite data from Sqlite database in AsyncTask.
+     * Persist Specialite data from Sqlite model in AsyncTask.
      *
      * @param specialite
      */
@@ -66,7 +66,7 @@ public class SpecialiteDataRepository {
     }
 
     /**
-     * Get Specialite data from Sqlite database by code cis.
+     * Get Specialite data from Sqlite model by code cis.
      *
      * @param specialiteIdCodeCis
      * @return liveData specialite
@@ -76,7 +76,7 @@ public class SpecialiteDataRepository {
     }
 
     /**
-     * Insert Specialite into Sqlite database.
+     * Insert Specialite into Sqlite model.
      *
      * @param specialite
      * @return
@@ -86,7 +86,7 @@ public class SpecialiteDataRepository {
     }
 
     /**
-     * Update Specialite from Sqlite database
+     * Update Specialite from Sqlite model
      *
      * @param specialite
      * @return
@@ -96,7 +96,7 @@ public class SpecialiteDataRepository {
     }
 
     /**
-     * Delete Specialite from Sqlite database
+     * Delete Specialite from Sqlite model
      *
      * @param specialite
      * @return

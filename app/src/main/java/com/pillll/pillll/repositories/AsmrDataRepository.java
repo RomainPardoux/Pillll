@@ -3,20 +3,14 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.AsmrDao;
-import com.pillll.pillll.database.entity.Asmr;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.AsmrDao;
+import com.pillll.pillll.model.entities.Asmr;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to Asmr data sources.
+ *
  * @author Romain Pardoux
  * @version 1.0
  */
@@ -29,9 +23,8 @@ public class AsmrDataRepository {
         this.asmrDao = db.asmrDao();
     }
 
-    // ACTION SUR WEB SERVICE
     /**
-     * Persist Asmr data in Sqlite database in AsyncTask.
+     * Persist Asmr data in Sqlite model in AsyncTask.
      *
      * @param asmr
      */
@@ -74,7 +67,7 @@ public class AsmrDataRepository {
     }
 
     /**
-     * Get a list of Asmr from Sqlite database by asmr id.
+     * Get a list of Asmr from Sqlite model by asmr id.
      * @param id
      * @return list of asmr
      */
@@ -83,7 +76,7 @@ public class AsmrDataRepository {
     }
 
     /**
-     * Get a list of Asmr from Sqlite database by code cis.
+     * Get a list of Asmr from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of asmr
      */
@@ -92,7 +85,7 @@ public class AsmrDataRepository {
     }
 
     /**
-     * Insert Asmr into Sqlite database.
+     * Insert Asmr into Sqlite model.
      * @param asmr
      * @return
      */
@@ -101,7 +94,7 @@ public class AsmrDataRepository {
     }
 
     /**
-     * Update Asmr from Sqlite database
+     * Update Asmr from Sqlite model
      * @param asmr
      * @return
      */
@@ -110,7 +103,7 @@ public class AsmrDataRepository {
     }
 
     /**
-     * Delete Asmr from Sqlite database
+     * Delete Asmr from Sqlite model
      * @param asmr
      * @return
      */

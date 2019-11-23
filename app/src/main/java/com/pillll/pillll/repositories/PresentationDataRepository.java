@@ -3,16 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.PresentationDao;
-import com.pillll.pillll.database.entity.Presentation;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.PresentationDao;
+import com.pillll.pillll.model.entities.Presentation;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to Presentation data sources.
@@ -30,7 +24,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Persist Presentation data from Sqlite database in AsyncTask.
+     * Persist Presentation data from Sqlite model in AsyncTask.
      *
      * @param presentation
      */
@@ -73,7 +67,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Get Presentation data from Sqlite database by presentation id.
+     * Get Presentation data from Sqlite model by presentation id.
      *
      * @param id
      * @return list of presentation
@@ -83,7 +77,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Get a list of Presentation from Sqlite database by code cis.
+     * Get a list of Presentation from Sqlite model by code cis.
      *
      * @param specialiteIdCodeCis
      * @return list of presentation
@@ -93,7 +87,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Get Presentation data from Sqlite database by code cip 7.
+     * Get Presentation data from Sqlite model by code cip 7.
      *
      * @param codeCip7
      * @return Presentation
@@ -103,7 +97,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Get Presentation data from Sqlite database by code cip 13.
+     * Get Presentation data from Sqlite model by code cip 13.
      *
      * @param codeCip13
      * @return Presentation
@@ -113,7 +107,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Insert Presentation into Sqlite database.
+     * Insert Presentation into Sqlite model.
      *
      * @param presentation
      * @return
@@ -123,7 +117,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Update Presentation from Sqlite database
+     * Update Presentation from Sqlite model
      *
      * @param presentation
      * @return
@@ -133,7 +127,7 @@ public class PresentationDataRepository {
     }
 
     /**
-     * Delete Presentation from Sqlite database
+     * Delete Presentation from Sqlite model
      *
      * @param presentation
      * @return

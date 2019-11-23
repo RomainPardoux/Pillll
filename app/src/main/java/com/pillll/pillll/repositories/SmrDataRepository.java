@@ -3,20 +3,14 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.SmrDao;
-import com.pillll.pillll.database.entity.Smr;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.SmrDao;
+import com.pillll.pillll.model.entities.Smr;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to Smr data sources.
+ *
  * @author Romain Pardoux
  * @version 1.0
  */
@@ -30,7 +24,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Persist Smr data from Sqlite database in AsyncTask.
+     * Persist Smr data from Sqlite model in AsyncTask.
      *
      * @param smr
      */
@@ -73,7 +67,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Get a list of Smr from Sqlite database by smr id.
+     * Get a list of Smr from Sqlite model by smr id.
      * @param id
      * @return list of smr
      */
@@ -82,7 +76,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Get a list of Smr from Sqlite database by code cis.
+     * Get a list of Smr from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of smr
      */
@@ -91,7 +85,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Insert Smr into Sqlite database.
+     * Insert Smr into Sqlite model.
      * @param smr
      * @return
      */
@@ -100,7 +94,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Update Smr from Sqlite database
+     * Update Smr from Sqlite model
      * @param smr
      * @return
      */
@@ -109,7 +103,7 @@ public class SmrDataRepository {
     }
 
     /**
-     * Delete Smr from Sqlite database
+     * Delete Smr from Sqlite model
      * @param smr
      * @return
      */

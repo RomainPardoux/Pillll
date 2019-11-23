@@ -3,16 +3,9 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.GeneriqueDao;
-import com.pillll.pillll.database.entity.Generique;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.GeneriqueDao;
+import com.pillll.pillll.model.entities.Generique;
 
 /**
  * Repository class that abstract access to Generique data sources.
@@ -30,7 +23,7 @@ public class GeneriqueDataRepository {
     }
 
     /**
-     * Persist Generique data in Sqlite database in AsyncTask.
+     * Persist Generique data in Sqlite model in AsyncTask.
      *
      * @param generique
      */
@@ -73,7 +66,7 @@ public class GeneriqueDataRepository {
     }
 
     /**
-     * Get Generique data from Sqlite database by code cis.
+     * Get Generique data from Sqlite model by code cis.
      *
      * @param specialiteIdCodeCis
      * @return liveData generique
@@ -83,7 +76,7 @@ public class GeneriqueDataRepository {
     }
 
     /**
-     * Insert Generique into Sqlite database.
+     * Insert Generique into Sqlite model.
      *
      * @param generique
      * @return
@@ -93,7 +86,7 @@ public class GeneriqueDataRepository {
     }
 
     /**
-     * Update Generique from Sqlite database
+     * Update Generique from Sqlite model
      *
      * @param generique
      * @return
@@ -103,7 +96,7 @@ public class GeneriqueDataRepository {
     }
 
     /**
-     * Delete Generique from Sqlite database
+     * Delete Generique from Sqlite model
      *
      * @param generique
      * @return

@@ -3,18 +3,13 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.LienCtDao;
-import com.pillll.pillll.database.entity.LienCt;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.LienCtDao;
+import com.pillll.pillll.model.entities.LienCt;
 
 /**
  * Repository class that abstract access to LienCt data sources.
+ *
  * @author Romain Pardoux
  * @version 1.0
  */
@@ -28,7 +23,7 @@ public class LienCtDataRepository {
     }
 
     /**
-     * Persist LienCt data from Sqlite database in AsyncTask.
+     * Persist LienCt data from Sqlite model in AsyncTask.
      *
      * @param lienCt
      */
@@ -71,7 +66,7 @@ public class LienCtDataRepository {
     }
 
     /**
-     * Get LienCt data from Sqlite database by code dossier has.
+     * Get LienCt data from Sqlite model by code dossier has.
      *
      * @param codeDossierHas
      * @return liveData lienCt
@@ -81,7 +76,7 @@ public class LienCtDataRepository {
     }
 
     /**
-     * Insert LienCt into Sqlite database.
+     * Insert LienCt into Sqlite model.
      *
      * @param lienCt
      * @return
@@ -91,7 +86,7 @@ public class LienCtDataRepository {
     }
 
     /**
-     * Update LienCt from Sqlite database
+     * Update LienCt from Sqlite model
      *
      * @param lienCt
      * @return
@@ -101,7 +96,7 @@ public class LienCtDataRepository {
     }
 
     /**
-     * Delete LienCt from Sqlite database
+     * Delete LienCt from Sqlite model
      *
      * @param lienCt
      * @return

@@ -3,32 +3,38 @@ package com.pillll.pillll.ui.activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.pillll.pillll.R;
-import com.pillll.pillll.database.entity.Asmr;
-import com.pillll.pillll.database.entity.Composition;
-import com.pillll.pillll.database.entity.ConditionPrescription;
-import com.pillll.pillll.database.entity.Generique;
-import com.pillll.pillll.database.entity.InfoImportante;
-import com.pillll.pillll.database.entity.LienCt;
-import com.pillll.pillll.database.entity.Presentation;
-import com.pillll.pillll.database.entity.Smr;
-import com.pillll.pillll.database.entity.Specialite;
-import com.pillll.pillll.database.entity.TitulaireSpecialite;
-import com.pillll.pillll.database.entity.VoiesAdministration;
-import com.pillll.pillll.viewModel.SpecialiteDetailViewModel;
+import com.pillll.pillll.model.entities.Asmr;
+import com.pillll.pillll.model.entities.Composition;
+import com.pillll.pillll.model.entities.ConditionPrescription;
+import com.pillll.pillll.model.entities.Generique;
+import com.pillll.pillll.model.entities.InfoImportante;
+import com.pillll.pillll.model.entities.LienCt;
+import com.pillll.pillll.model.entities.Presentation;
+import com.pillll.pillll.model.entities.Smr;
+import com.pillll.pillll.model.entities.Specialite;
+import com.pillll.pillll.model.entities.TitulaireSpecialite;
+import com.pillll.pillll.model.entities.VoiesAdministration;
+import com.pillll.pillll.viewModel.DetailViewModel;
 
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private SpecialiteDetailViewModel specialiteDetailViewModel;
+    private DetailViewModel detailViewModel;
     private EditText editText;
     private TextView textViewPresentation;
     private TextView textViewSpecialite;
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private LiveData<Generique> generiqueLiveData;
     private LiveData<LienCt> lienCtLiveData;
 
-
+    private Button scanButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +89,18 @@ public class MainActivity extends AppCompatActivity {
         textViewLienCt = findViewById(R.id.lien_ct_textView);
         textViewTitulaireSpecialite = findViewById(R.id.titulaire_specialite_textView);
         textViewVoiesAdministration = findViewById(R.id.voies_administrations_textView);
+        detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
+        //ZXING
+        scanButton = (Button)findViewById(R.id.scan_button);
 
-        specialiteDetailViewModel = ViewModelProviders.of(this).get(SpecialiteDetailViewModel.class);
         loadViewModel();
     }
 
     private void loadViewModel(){
 
         // On charge les données du view model
-        presentationLiveData = specialiteDetailViewModel.getCurrentPresentation();
+        presentationLiveData = detailViewModel.getCurrentPresentation();
         if (presentationLiveData != null){
             libellePresentation = presentationLiveData.getValue().getLibelle();
             if (libellePresentation != null){
@@ -102,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        specialiteLiveData = specialiteDetailViewModel.getCurrentSpecialite();
+        specialiteLiveData = detailViewModel.getCurrentSpecialite();
         if (specialiteLiveData != null){
             libelleSpecialite = specialiteLiveData.getValue().getDenomination();
             if (libelleSpecialite != null){
@@ -112,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        compositionLiveData = specialiteDetailViewModel.getCurrentCompositions();
+        compositionLiveData = detailViewModel.getCurrentCompositions();
         if (compositionLiveData != null){
             compositions = compositionLiveData.getValue();
             if (compositions != null){
@@ -128,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-        asmrLiveData = specialiteDetailViewModel.getCurrentAsmrs();
+        asmrLiveData = detailViewModel.getCurrentAsmrs();
         if (asmrLiveData != null){
             asmrs = asmrLiveData.getValue();
             if (asmrs != null){
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        smrLiveData = specialiteDetailViewModel.getCurrentSmrs();
+        smrLiveData = detailViewModel.getCurrentSmrs();
         if (smrLiveData != null){
             smrs = smrLiveData.getValue();
             if (smrs != null){
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        infosImportantesLiveData = specialiteDetailViewModel.getCurrentInfosImportantes();
+        infosImportantesLiveData = detailViewModel.getCurrentInfosImportantes();
         if (infosImportantesLiveData != null){
             infosImportantes = infosImportantesLiveData.getValue();
             if (infosImportantes != null){
@@ -175,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        voiesAdministrationsLiveData = specialiteDetailViewModel.getCurrentVoiesAdministrations();
+        voiesAdministrationsLiveData = detailViewModel.getCurrentVoiesAdministrations();
         if (voiesAdministrationsLiveData != null){
             voiesAdministrations = voiesAdministrationsLiveData.getValue();
             if (voiesAdministrations != null){
@@ -190,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        conditionPrescriptionLiveData = specialiteDetailViewModel.getCurrentConditionsPrescriptions();
+        conditionPrescriptionLiveData = detailViewModel.getCurrentConditionsPrescriptions();
         if (conditionPrescriptionLiveData != null){
             conditionsPrescriptions = conditionPrescriptionLiveData.getValue();
             if (conditionsPrescriptions != null){
@@ -205,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        titulairesSpecialitesLiveData = specialiteDetailViewModel.getCurrentTitulaireSpecialites();
+        titulairesSpecialitesLiveData = detailViewModel.getCurrentTitulaireSpecialites();
         if(titulairesSpecialitesLiveData != null){
             titulairesSpecialites = titulairesSpecialitesLiveData.getValue();
             if (titulairesSpecialites != null){
@@ -220,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        generiqueLiveData = specialiteDetailViewModel.getCurrentGenerique();
+        generiqueLiveData = detailViewModel.getCurrentGenerique();
         if (generiqueLiveData != null){
             String generiqueLiebelle = "Libelle Groupe: ";
             Generique generique = generiqueLiveData.getValue();
@@ -234,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        lienCtLiveData = specialiteDetailViewModel.getCurrentLienCt();
+        lienCtLiveData = detailViewModel.getCurrentLienCt();
         if (lienCtLiveData != null){
             String lienCtLibelle = "Lien Ct: ";
             LienCt lienCt = lienCtLiveData.getValue();
@@ -253,14 +260,14 @@ public class MainActivity extends AppCompatActivity {
 
         //On recupere le code cip 7 ou 13 du textView
         String idCodeCip = editText.getText().toString();
-        specialiteDetailViewModel.refreshData(idCodeCip);
-        specialiteDetailViewModel.getPresentation(idCodeCip).observeForever(new Observer<Presentation>() {
+        detailViewModel.refreshData(idCodeCip);
+        detailViewModel.getPresentation(idCodeCip).observeForever(new Observer<Presentation>() {
             @Override
             public void onChanged(@Nullable Presentation presentation) {
                 if (presentation != null){
                     textViewPresentation.setText(presentation.getLibelle());
                     long idCodeCis = presentation.getSpecialiteIdCodeCis();
-                    specialiteDetailViewModel.getSpecialite(idCodeCis).observeForever(new Observer<Specialite>() {
+                    detailViewModel.getSpecialite(idCodeCis).observeForever(new Observer<Specialite>() {
                         @Override
                         public void onChanged(@Nullable Specialite specialite) {
                             if (specialite != null){
@@ -270,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    specialiteDetailViewModel.getCompositions(idCodeCis).observeForever(new Observer<List<Composition>>() {
+                    detailViewModel.getCompositions(idCodeCis).observeForever(new Observer<List<Composition>>() {
                         @Override
                         public void onChanged(@Nullable List<Composition> compositions) {
                             if (compositions != null || compositions.size() != 0){
@@ -286,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getAsmrs(idCodeCis).observeForever(new Observer<List<Asmr>>() {
+                    detailViewModel.getAsmrs(idCodeCis).observeForever(new Observer<List<Asmr>>() {
                         @Override
                         public void onChanged(@Nullable List<Asmr> asmrs) {
                             if(asmrs != null || asmrs.size()!=0){
@@ -294,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                                 for (Asmr asmr: asmrs) {
                                     asmrValeur += asmr.getValeur();
                                     asmrValeur += ". ";
-                                    specialiteDetailViewModel.getLiensCts(asmr.getLienCtCodeDossierHas()).observeForever(new Observer<LienCt>() {
+                                    detailViewModel.getLiensCts(asmr.getLienCtCodeDossierHas()).observeForever(new Observer<LienCt>() {
                                         @Override
                                         public void onChanged(@Nullable LienCt lienCt) {
                                             if (lienCt!=null){
@@ -318,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getSmrs(idCodeCis).observeForever(new Observer<List<Smr>>() {
+                    detailViewModel.getSmrs(idCodeCis).observeForever(new Observer<List<Smr>>() {
                         @Override
                         public void onChanged(@Nullable List<Smr> smrs) {
                             if(smrs != null || smrs.size()!=0){
@@ -334,12 +341,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getInfosImportantes(idCodeCis).observeForever(new Observer<List<InfoImportante>>() {
+                    detailViewModel.getInfosImportantes(idCodeCis).observeForever(new Observer<List<InfoImportante>>() {
                         @Override
                         public void onChanged(@Nullable List<InfoImportante> infoImportantes) {
-                            if (infosImportantes != null || infoImportantes.size()!=0){
+                            if (infoImportantes != null || infoImportantes.size()!=0){
                                 String descriptionInfoImportante = "Info(s) importante(s): ";
-                                for (InfoImportante infoImportante: infosImportantes) {
+                                for (InfoImportante infoImportante: infoImportantes) {
                                     descriptionInfoImportante += infoImportante.getDescription();
                                     descriptionInfoImportante += ". ";
                                 }
@@ -351,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getVoiesAdministrations(idCodeCis).observeForever(new Observer<List<VoiesAdministration>>() {
+                    detailViewModel.getVoiesAdministrations(idCodeCis).observeForever(new Observer<List<VoiesAdministration>>() {
                         @Override
                         public void onChanged(@Nullable List<VoiesAdministration> voiesAdministrations) {
                             if (voiesAdministrations!=null || voiesAdministrations.size() != 0){
@@ -367,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getConditionsPrescriptions(idCodeCis).observeForever(new Observer<List<ConditionPrescription>>() {
+                    detailViewModel.getConditionsPrescriptions(idCodeCis).observeForever(new Observer<List<ConditionPrescription>>() {
                         @Override
                         public void onChanged(@Nullable List<ConditionPrescription> conditionPrescriptions) {
                             if (conditionPrescriptions != null || conditionPrescriptions.size() != 0){
@@ -383,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getTitulairesSpecialites(idCodeCis).observeForever(new Observer<List<TitulaireSpecialite>>() {
+                    detailViewModel.getTitulairesSpecialites(idCodeCis).observeForever(new Observer<List<TitulaireSpecialite>>() {
                         @Override
                         public void onChanged(@Nullable List<TitulaireSpecialite> titulaireSpecialites) {
                             if (titulaireSpecialites!=null || titulaireSpecialites.size()!=0){
@@ -399,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    specialiteDetailViewModel.getGeneriques(idCodeCis).observeForever(new Observer<Generique>() {
+                    detailViewModel.getGeneriques(idCodeCis).observeForever(new Observer<Generique>() {
                         @Override
                         public void onChanged(@Nullable Generique generique) {
                             if (generique!= null){
@@ -411,11 +418,31 @@ public class MainActivity extends AppCompatActivity {
                             }else {
                                 textViewGenerique.setText("Libelle Groupe: ");
                             }
-
                         }
                     });
                 }
             }
         });
     }
+
+    //Scan
+    public void Scan(View view) {
+        new IntentIntegrator(this).initiateScan(); // `this` is the current Activity
+    }
+
+    // Get the results:
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 }

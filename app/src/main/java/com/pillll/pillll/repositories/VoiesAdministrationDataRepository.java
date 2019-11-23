@@ -3,17 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.VoiesAdministrationDao;
-import com.pillll.pillll.database.entity.VoiesAdministration;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.VoiesAdministrationDao;
+import com.pillll.pillll.model.entities.VoiesAdministration;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to VoiesAdministration data sources.
@@ -31,7 +24,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Persist VoiesAdministration data from Sqlite database in AsyncTask.
+     * Persist VoiesAdministration data from Sqlite model in AsyncTask.
      *
      * @param voiesAdministration
      */
@@ -74,7 +67,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Get a list of VoiesAdministration from Sqlite database by voiesAdministration id.
+     * Get a list of VoiesAdministration from Sqlite model by voiesAdministration id.
      * @param id
      * @return list of voiesAdministration
      */
@@ -83,7 +76,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Get a list of VoiesAdministration from Sqlite database by code cis.
+     * Get a list of VoiesAdministration from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of voiesAdministration
      */
@@ -92,7 +85,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Insert VoiesAdministration into Sqlite database.
+     * Insert VoiesAdministration into Sqlite model.
      * @param voiesAdministration
      * @return
      */
@@ -101,7 +94,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Update VoiesAdministration from Sqlite database
+     * Update VoiesAdministration from Sqlite model
      * @param voiesAdministration
      * @return
      */
@@ -110,7 +103,7 @@ public class VoiesAdministrationDataRepository {
     }
 
     /**
-     * Delete VoiesAdministration from Sqlite database
+     * Delete VoiesAdministration from Sqlite model
      * @param voiesAdministration
      * @return
      */

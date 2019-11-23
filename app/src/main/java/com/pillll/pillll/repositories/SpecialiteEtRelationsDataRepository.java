@@ -2,9 +2,9 @@ package com.pillll.pillll.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.dao.SpecialiteEtRelationsDao;
-import com.pillll.pillll.database.entity.SpecialiteEtRelations;
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.SpecialiteEtRelationsDao;
+import com.pillll.pillll.model.entities.SpecialiteEtRelations;
 import java.util.List;
 
 /**
@@ -22,10 +22,8 @@ public class SpecialiteEtRelationsDataRepository {
         this.specialiteEtRelationsDao = db.specialiteEtRelationsDao();
     }
 
-    // ACTION SUR SQLITE DB
-
     /**
-     * Get SpecialiteEtRelations data from Sqlite database by code cis.
+     * Get SpecialiteEtRelations data from Sqlite model by code cis.
      *
      * @param specialiteIdCodeCis
      * @return liveData specialiteEtRelations
@@ -35,7 +33,7 @@ public class SpecialiteEtRelationsDataRepository {
     }
 
     /**
-     * Get a list of all SpecialiteEtRelations from Sqlite database.
+     * Get a list of all SpecialiteEtRelations from Sqlite model.
      *
      * @return liveData List specialiteEtRelations
      */

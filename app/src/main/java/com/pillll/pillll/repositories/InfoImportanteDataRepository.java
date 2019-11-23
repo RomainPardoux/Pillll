@@ -3,17 +3,10 @@ package com.pillll.pillll.repositories;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
-import com.pillll.pillll.database.NetworkService;
-import com.pillll.pillll.database.PillllDatabase;
-import com.pillll.pillll.database.PillllWebService;
-import com.pillll.pillll.database.dao.InfoImportanteDao;
-import com.pillll.pillll.database.entity.InfoImportante;
-
+import com.pillll.pillll.model.PillllDatabase;
+import com.pillll.pillll.model.dao.InfoImportanteDao;
+import com.pillll.pillll.model.entities.InfoImportante;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Repository class that abstract access to InfoImportante data sources.
@@ -31,7 +24,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Persist InfoImportante data in Sqlite database in AsyncTask.
+     * Persist InfoImportante data in Sqlite model in AsyncTask.
      *
      * @param infoImportante
      */
@@ -74,7 +67,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Get a list of InfoImportante from Sqlite database by infoImportante id.
+     * Get a list of InfoImportante from Sqlite model by infoImportante id.
      * @param id
      * @return list of infoImportante
      */
@@ -83,7 +76,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Get a list of InfoImportante from Sqlite database by code cis.
+     * Get a list of InfoImportante from Sqlite model by code cis.
      * @param specialiteIdCodeCis
      * @return list of infoImportante
      */
@@ -92,7 +85,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Insert InfoImportante into Sqlite database.
+     * Insert InfoImportante into Sqlite model.
      * @param infoImportante
      * @return
      */
@@ -101,7 +94,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Update InfoImportante from Sqlite database
+     * Update InfoImportante from Sqlite model
      * @param infoImportante
      * @return
      */
@@ -110,7 +103,7 @@ public class InfoImportanteDataRepository {
     }
 
     /**
-     * Delete InfoImportante from Sqlite database
+     * Delete InfoImportante from Sqlite model
      * @param infoImportante
      * @return
      */
