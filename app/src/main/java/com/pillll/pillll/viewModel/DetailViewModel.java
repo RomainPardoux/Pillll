@@ -1,9 +1,9 @@
 package com.pillll.pillll.viewModel;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.Nullable;
 import com.pillll.pillll.model.entities.Asmr;
 import com.pillll.pillll.model.entities.Composition;
 import com.pillll.pillll.model.entities.ConditionPrescription;

@@ -1,9 +1,9 @@
 package com.pillll.pillll;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.persistence.room.Room;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.room.Room;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.pillll.pillll.model.PillllDatabase;
 import com.pillll.pillll.model.dao.LienCtDao;
 import com.pillll.pillll.model.dao.SmrDao;

@@ -1,6 +1,6 @@
 package com.pillll.pillll.model.converter;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 import java.util.Date;
 
 /**

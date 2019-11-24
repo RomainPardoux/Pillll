@@ -6,22 +6,6 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <EditText
-        android:id="@+id/idCodeCisArea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter ID Code Cis Here ..."
-        android:inputType="number"
-        android:paddingBottom="20dp" />
-
-    <Button
-        android:id="@+id/searchFromApi_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="getData"
-        android:paddingBottom="20dp"
-        android:text="Get Data" />
-
     <Button
         android:id="@+id/scan_button"
         android:layout_width="match_parent"

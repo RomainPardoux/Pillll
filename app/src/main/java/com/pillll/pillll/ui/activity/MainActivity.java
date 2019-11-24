@@ -1,11 +1,11 @@
 package com.pillll.pillll.ui.activity;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +35,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private DetailViewModel detailViewModel;
-    private EditText editText;
     private TextView textViewPresentation;
     private TextView textViewSpecialite;
     private TextView textViewComposition;
@@ -47,14 +46,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewInfosImportantes;
     private TextView textViewGenerique;
     private TextView textViewLienCt;
-
     private String libellePresentation;
     private LiveData<Presentation> presentationLiveData;
     private String libelleSpecialite;
     private LiveData<Specialite> specialiteLiveData;
     private LiveData<List<Composition>> compositionLiveData;
     private List<Composition> compositions;
-
     private LiveData<List<Smr>> smrLiveData;
     private List<Smr> smrs;
     private LiveData<List<Asmr>> asmrLiveData;
@@ -69,18 +66,15 @@ public class MainActivity extends AppCompatActivity {
     private List<InfoImportante> infosImportantes;
     private LiveData<Generique> generiqueLiveData;
     private LiveData<LienCt> lienCtLiveData;
-
     private Button scanButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText = findViewById(R.id.idCodeCisArea);
         textViewPresentation = findViewById(R.id.denomination_presentation_textView);
         textViewSpecialite = findViewById(R.id.denomination_specialite_textView);
         textViewComposition = findViewById(R.id.denomination_substance_textView);
-
         textViewAsmr = findViewById(R.id.asmr_textView);
         textViewSmr = findViewById(R.id.smr_textView);
         textViewConditionsPrescription = findViewById(R.id.condition_prescription_textView);
@@ -90,10 +84,8 @@ public class MainActivity extends AppCompatActivity {
         textViewTitulaireSpecialite = findViewById(R.id.titulaire_specialite_textView);
         textViewVoiesAdministration = findViewById(R.id.voies_administrations_textView);
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-
         //ZXING
         scanButton = (Button)findViewById(R.id.scan_button);
-
         loadViewModel();
     }
 
@@ -256,10 +248,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getData(View view) {
+    //SCAN WITH ZXING
+    public void Scan(View view) {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setOrientationLocked(false);
+        intentIntegrator.initiateScan();
+    }
+
+    // Get the results:
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                getData(result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void getData(String idCodeCip) {
 
         //On recupere le code cip 7 ou 13 du textView
-        String idCodeCip = editText.getText().toString();
         detailViewModel.refreshData(idCodeCip);
         detailViewModel.getPresentation(idCodeCip).observeForever(new Observer<Presentation>() {
             @Override
@@ -424,25 +438,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    //Scan
-    public void Scan(View view) {
-        new IntentIntegrator(this).initiateScan(); // `this` is the current Activity
-    }
-
-    // Get the results:
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
 }
